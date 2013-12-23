@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.Company.ProductName;
+package com.HotelRoosevelt.RockPaperScissor;
 
 import tv.ouya.console.api.OuyaController;
 import tv.ouya.sdk.*;
