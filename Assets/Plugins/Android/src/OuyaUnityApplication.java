@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package tv.ouya.demo.OuyaUnityApplication;
+package com.Company.ProductName;
 
 import tv.ouya.console.api.OuyaController;
 import tv.ouya.sdk.*;
