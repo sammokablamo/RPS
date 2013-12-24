@@ -1,9 +1,22 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PlayerController : MonoBehaviour {
+public class PlayerController : MonoBehaviour,
+	//Ouya references
+	OuyaSDK.IMenuButtonUpListener,
+	OuyaSDK.IMenuAppearingListener,
+	OuyaSDK.IPauseListener,
+	OuyaSDK.IResumeListener
+{
+	//Ouya Controller variables
+	private const float INNER_DEADZONE = 0.3f;
+	
+	private const float MOVE_SPEED = 200f;
+	
+	public OuyaSDK.OuyaPlayer Index;
 
-	public float speed;
+	//player speed
+	//public float speed; 
 
 	//gui text variable
 	public GUIText countText;
@@ -11,6 +24,26 @@ public class PlayerController : MonoBehaviour {
 
 	//counter
 	private int count;
+
+	void Awake() //Awake is called when the script instance is being loaded.
+	{
+		OuyaSDK.registerMenuButtonUpListener(this);
+		OuyaSDK.registerMenuAppearingListener(this);
+		OuyaSDK.registerPauseListener(this);
+		OuyaSDK.registerResumeListener(this);
+		Input.ResetInputAxes();
+	}
+
+	void OnDestroy()//This function is called when the MonoBehaviour will be destroyed. Cleanup Ouya components on destroyed
+	{
+		OuyaSDK.unregisterMenuButtonUpListener(this);
+		OuyaSDK.unregisterMenuAppearingListener(this);
+		OuyaSDK.unregisterPauseListener(this);
+		OuyaSDK.unregisterResumeListener(this);
+		Input.ResetInputAxes();
+	}
+
+
 	//start is called on the frame when a scrip tis enabled just before any of the update methods are called for the first time.
 	void Start ()
 	{
@@ -19,16 +52,32 @@ public class PlayerController : MonoBehaviour {
 		winText.text = "";
 	}
 
+	//Update is called every frame, if the MonoBehaviour is enabled.
+	void Update ()
+	{
+
+	}
 	//fixed update is called every fixed framerate frame if monobehavior is enabled.
 	void FixedUpdate ()
 	{
 		//player controls
-		float moveHorizontal = Input.GetAxis ("Horizontal");
-		float moveVertical = Input.GetAxis ("Vertical");
+		float moveHorizontal = OuyaExampleCommon.GetAxis(OuyaSDK.KeyEnum.AXIS_LSTICK_X, Index);//Input.GetAxis ("Horizontal");
+		float moveVertical = OuyaExampleCommon.GetAxis(OuyaSDK.KeyEnum.AXIS_LSTICK_Y, Index);//Input.GetAxis ("Vertical");
+
+		//controller deadzone setup
+		if (Mathf.Abs(moveHorizontal) > INNER_DEADZONE)
+		{
+			moveHorizontal += moveHorizontal*MOVE_SPEED*Time.deltaTime;
+		}
+		
+		if (Mathf.Abs(moveVertical) > INNER_DEADZONE)
+		{
+			moveVertical -= moveVertical*MOVE_SPEED*Time.deltaTime;
+		}
 
 		Vector3 movement = new Vector3 (moveHorizontal, 0.0f, moveVertical);
 
-		rigidbody.AddForce(movement * speed * Time.deltaTime);
+		rigidbody.AddForce(movement * MOVE_SPEED * Time.deltaTime);
 
 		//pickup stuff
 		//when player controller collides with an object, create a collider variable and name it "other".
@@ -54,6 +103,21 @@ public class PlayerController : MonoBehaviour {
 		{
 			winText.text = "YOU WIN!";
 		}
+	}
+	public void OuyaMenuButtonUp()
+	{
+	}
+	
+	public void OuyaMenuAppearing()
+	{
+	}
+	
+	public void OuyaOnPause()
+	{
+	}
+	
+	public void OuyaOnResume()
+	{
 	}
 
 }
