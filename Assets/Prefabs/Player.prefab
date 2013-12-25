@@ -13,6 +13,7 @@ GameObject:
   - 23: {fileID: 2300000}
   - 54: {fileID: 5400000}
   - 114: {fileID: 11400000}
+  - 114: {fileID: 11400002}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -85,9 +86,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67ff64b2ebfbfef4e82918393ae83749, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Index: 1
   countText: {fileID: 0}
   winText: {fileID: 0}
+--- !u!114 &11400002
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: daf80e5ec5543c9409a5eaaba4a8691c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  continuousScan: 1
+  player: 1
+  deadzoneType: 1
+  deadzone: .25
+  triggerTreshold: .200000003
+  x_Axis_LeftStick: 0
+  y_Axis_LeftStick: 0
 --- !u!135 &13500000
 SphereCollider:
   m_ObjectHideFlags: 1

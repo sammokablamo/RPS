@@ -1,19 +1,20 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PlayerController : MonoBehaviour,
-	//Ouya references
+public class PlayerController : MonoBehaviour
+/*	//Ouya references, testing whether i still need this.
 	OuyaSDK.IMenuButtonUpListener,
 	OuyaSDK.IMenuAppearingListener,
 	OuyaSDK.IPauseListener,
 	OuyaSDK.IResumeListener
+*/
 {
 	//Ouya Controller variables
-	private const float INNER_DEADZONE = 0.3f;
+	//private const float INNER_DEADZONE = 0.3f;
 	
 	private const float MOVE_SPEED = 200f;
 	
-	public OuyaSDK.OuyaPlayer Index;
+	//public OuyaSDK.OuyaPlayer Index;
 
 	//player speed
 	//public float speed; 
@@ -25,23 +26,32 @@ public class PlayerController : MonoBehaviour,
 	//counter
 	private int count;
 
+	private InputHandler inputHandler;//reference input handler, create a local variable version of class input handler
+
 	void Awake() //Awake is called when the script instance is being loaded.
 	{
+		/*
 		OuyaSDK.registerMenuButtonUpListener(this);
 		OuyaSDK.registerMenuAppearingListener(this);
 		OuyaSDK.registerPauseListener(this);
 		OuyaSDK.registerResumeListener(this);
 		Input.ResetInputAxes();
+		*/
+
+		//setup references
+		inputHandler = GetComponent<InputHandler> ();
 	}
 
 	void OnDestroy()//This function is called when the MonoBehaviour will be destroyed. Cleanup Ouya components on destroyed
 	{
+		/*
 		OuyaSDK.unregisterMenuButtonUpListener(this);
 		OuyaSDK.unregisterMenuAppearingListener(this);
 		OuyaSDK.unregisterPauseListener(this);
 		OuyaSDK.unregisterResumeListener(this);
 		Input.ResetInputAxes();
-	}
+		*/
+}
 
 
 	//start is called on the frame when a scrip tis enabled just before any of the update methods are called for the first time.
@@ -61,19 +71,8 @@ public class PlayerController : MonoBehaviour,
 	void FixedUpdate ()
 	{
 		//player controls
-		float moveHorizontal = OuyaExampleCommon.GetAxis(OuyaSDK.KeyEnum.AXIS_LSTICK_X, Index);//Input.GetAxis ("Horizontal");
-		float moveVertical = OuyaExampleCommon.GetAxis(OuyaSDK.KeyEnum.AXIS_LSTICK_Y, Index);//Input.GetAxis ("Vertical");
-
-		//controller deadzone setup
-		if (Mathf.Abs(moveHorizontal) > INNER_DEADZONE)
-		{
-			moveHorizontal += moveHorizontal*MOVE_SPEED*Time.deltaTime;
-		}
-		
-		if (Mathf.Abs(moveVertical) > INNER_DEADZONE)
-		{
-			moveVertical -= moveVertical*MOVE_SPEED*Time.deltaTime;
-		}
+		float moveHorizontal = inputHandler.x_Axis_LeftStick;
+		float moveVertical = inputHandler.y_Axis_LeftStick;
 
 		Vector3 movement = new Vector3 (moveHorizontal, 0.0f, moveVertical);
 
