@@ -114,7 +114,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DEVELOPER_ID: 09aa6215-7f94-4f26-bf2f-f90fd95bdcc5
-  debugOff: 1
+  debugOff: 0
 --- !u!1001 &1419255291
 Prefab:
   m_ObjectHideFlags: 0
@@ -153,6 +153,10 @@ Prefab:
     - target: {fileID: 11400000, guid: ad92c5da04e1b904ead8291e00d4c927, type: 2}
       propertyPath: DEVELOPER_ID
       value: 09aa6215-7f94-4f26-bf2f-f90fd95bdcc5
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: ad92c5da04e1b904ead8291e00d4c927, type: 2}
+      propertyPath: debugOff
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ad92c5da04e1b904ead8291e00d4c927, type: 2}

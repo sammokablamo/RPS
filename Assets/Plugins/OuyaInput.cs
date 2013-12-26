@@ -895,29 +895,33 @@ public static class OuyaInput
 		}
 	}
 
+	//sam: this function has been replaced by a tweaked version by shulkinator
 	private static bool SwitchSinglePlayerMap() {
 		/* this method allows to check if a single joystick connected has a shifted player channel
-		 * sometimes a controller does not use the channel his Unity list position would indicate
-		 * this means that a single player controller might be sending his inputs in channels 1-4
-		 * this problem was observed when dis- and reconnecting XBOX360 USB controllers
-		 * our strategy is to run through all the channels and check where we find an input
-		 * return: a flag confirming that we have switched maps successfully
-		 */
+  * sometimes a controller does not use the channel his Unity list position would indicate
+  * this means that a single player controller might be sending his inputs in channels 1-4
+  * this problem was observed when dis- and reconnecting XBOX360 USB controllers
+  * our strategy is to run through all the channels and check where we find an input
+  * return: a flag confirming that we have switched maps successfully
+  */
 		// security exit in case of missing controller connection
 		if (playerControllers[0] == null) return false;
-
+		
+		// don't do this on Ouya?
+		if (OuyaSDK.IsOUYA()) return false;
+		
 		// check all channels until we find an input
 		for (int i = 1; i <= playersMax; i++)
 		{
 			// convert the index to test player
 			OuyaPlayer testPlayer = (OuyaPlayer)i;
-
+			
 			/* REAMAP TO NEXT CHANNEL */ 
 			// switch the channles of the existing mapping
 			playerControllers[0].setController(testPlayer, mapTypes[0]);
 			// redo the mapping in the existing container
 			mapController(playerControllers[0]);
-
+			
 			/* SCAN CHECK INPUT */ 
 			// we check if we get an input signal on any button
 			// or axis of this player channel
@@ -930,17 +934,17 @@ public static class OuyaInput
 			if (GetAxis(OuyaAxis.DY, OuyaPlayer.P01) != 0) return true;
 			if (GetAxis(OuyaAxis.LT, OuyaPlayer.P01) != 0) return true;
 			if (GetAxis(OuyaAxis.RT, OuyaPlayer.P01) != 0) return true;
-
+			
 			if (GetButton(OuyaButton.O, OuyaPlayer.P01)) return true;
 			if (GetButton(OuyaButton.U, OuyaPlayer.P01)) return true;
 			if (GetButton(OuyaButton.Y, OuyaPlayer.P01)) return true;
 			if (GetButton(OuyaButton.A, OuyaPlayer.P01)) return true;
-
+			
 			if (GetButton(OuyaButton.LB, OuyaPlayer.P01)) return true;
 			if (GetButton(OuyaButton.RB, OuyaPlayer.P01)) return true;
 			if (GetButton(OuyaButton.L3, OuyaPlayer.P01)) return true;
 			if (GetButton(OuyaButton.R3, OuyaPlayer.P01)) return true;
-
+			
 			if (GetButton(OuyaButton.START, OuyaPlayer.P01)) return true;
 			if (GetButton(OuyaButton.SELECT, OuyaPlayer.P01)) return true;
 			if (GetButton(OuyaButton.SYSTEM, OuyaPlayer.P01)) return true;
