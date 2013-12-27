@@ -47,7 +47,7 @@ Renderer:
   - {fileID: 10302, guid: 0000000000000000f000000000000000, type: 0}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
-  m_UseLightProbes: 0
+  m_UseLightProbes: 1
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
   m_SortingLayer: 0
@@ -59,7 +59,7 @@ MeshFilter:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
-  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: 4300000, guid: efa62f3b13771b543aba85723db9d8b6, type: 3}
 --- !u!54 &5400000
 Rigidbody:
   m_ObjectHideFlags: 1
@@ -88,6 +88,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   countText: {fileID: 0}
   winText: {fileID: 0}
+  gameManagerGameObject: {fileID: 0}
+  rockMesh: {fileID: 4300000, guid: c60a640a95ce8004f8287ed22af32b9d, type: 3}
+  paperMesh: {fileID: 4300000, guid: efa62f3b13771b543aba85723db9d8b6, type: 3}
+  scissorMesh: {fileID: 4300000, guid: a22c75ce38fb9e44fa41ffa9c0701189, type: 3}
 --- !u!114 &11400002
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -106,6 +110,14 @@ MonoBehaviour:
   triggerTreshold: .200000003
   x_Axis_LeftStick: 0
   y_Axis_LeftStick: 0
+  pressed_O: 0
+  pressed_U: 0
+  pressed_Y: 0
+  pressed_A: 0
+  down_O: 0
+  down_U: 0
+  down_Y: 0
+  down_A: 0
 --- !u!135 &13500000
 SphereCollider:
   m_ObjectHideFlags: 1

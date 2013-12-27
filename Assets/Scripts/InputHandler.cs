@@ -57,7 +57,7 @@ public class InputHandler : MonoBehaviour
 	public bool down_Y;
 	public bool down_A;
 
-
+	//public static void SetEditorPlatform(EditorWorkPlatform Android);
 
 	/* -----------------------------------------------------------------------------------
 	 * INITIAL SETUP
@@ -66,7 +66,8 @@ public class InputHandler : MonoBehaviour
 	public void Start()
 	{
 		//Controller framework: setup what platform you're on.
-		//OuyaInput.SetEditorPlatform (EditorWorkPlatform Android);
+		//public static void SetEditorPlatform(EditorWorkPlatform workPlatform);
+		//OuyaInput.SetEditorPlatform(Platform Android);
 
 		// OPTIONAL: set button state scanning to receive input state events for trigger and d-pads
 		OuyaInput.SetContinuousScanning(continuousScan);

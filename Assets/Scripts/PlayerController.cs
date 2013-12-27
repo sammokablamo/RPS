@@ -66,9 +66,9 @@ public class PlayerController : MonoBehaviour
 	void Update ()
 	{
 		Debug.Log ("Update", gameObject);
-		bool rockButton = inputHandler.pressed_U;
-		bool paperButton = inputHandler.pressed_Y;
-		bool scissorButton = inputHandler.pressed_A;
+		bool rockButton = inputHandler.down_U;
+		bool paperButton = inputHandler.down_Y;
+		bool scissorButton = inputHandler.down_A;
 /*
 		GUI.Label(new Rect(50, 260, 100, 20), "O " + OuyaInput.GetButton(OuyaButton.O, player));
 		GUI.Label(new Rect(50, 280, 100, 20), "U " + OuyaInput.GetButton(OuyaButton.U, player));
@@ -82,7 +82,6 @@ public class PlayerController : MonoBehaviour
 			if (rockButton == true)
 			{
 				Debug.Log ("Rock", gameObject);
-				//GetComponent(MeshFilter).mesh = Rock;
 				meshFilter.mesh = rockMesh;
 				//SetClass(OuyaPlayer, 0); //A yet uncreated function that sets current player to a class number, rock
 			
