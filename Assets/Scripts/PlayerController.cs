@@ -2,17 +2,11 @@
 using System.Collections;
 
 public class PlayerController : MonoBehaviour
-/*	//Ouya references, testing whether i still need this.
-	OuyaSDK.IMenuButtonUpListener,
-	OuyaSDK.IMenuAppearingListener,
-	OuyaSDK.IPauseListener,
-	OuyaSDK.IResumeListener
-*/
 {
 	//Ouya Controller variables
 	//private const float INNER_DEADZONE = 0.3f;
 	
-	private const float MOVE_SPEED = 200f;
+	private const float MOVE_SPEED = 100f;
 	
 	//public OuyaSDK.OuyaPlayer Index;
 
@@ -27,36 +21,42 @@ public class PlayerController : MonoBehaviour
 	private int count;
 
 	private InputHandler inputHandler;//reference input handler, create a local variable version of class input handler
+	//reference GameManager's Gameobject
+	public GameObject gameManagerGameObject;
+	private GameManager gameManager; //localprivate reference to game object script
+
+	//create array of meshes
+	public Mesh rockMesh;
+	public Mesh paperMesh;
+	public Mesh scissorMesh;
+
+	//reference for mesh filter
+	private MeshFilter meshFilter;
 
 	void Awake() //Awake is called when the script instance is being loaded.
 	{
-		/*
-		OuyaSDK.registerMenuButtonUpListener(this);
-		OuyaSDK.registerMenuAppearingListener(this);
-		OuyaSDK.registerPauseListener(this);
-		OuyaSDK.registerResumeListener(this);
-		Input.ResetInputAxes();
-		*/
-
 		//setup references
-		inputHandler = GetComponent<InputHandler> ();
+		inputHandler = GetComponent<InputHandler> (); //gamepad input handler script reference
+		gameManagerGameObject = GameObject.Find("GameManager");//this will handle when class switching can occur
+		gameManager = gameManagerGameObject.GetComponent<GameManager>();
+
+		//mesh filter component reference
+		meshFilter = GetComponent<MeshFilter> ();
+
+
 	}
 
 	void OnDestroy()//This function is called when the MonoBehaviour will be destroyed. Cleanup Ouya components on destroyed
 	{
-		/*
-		OuyaSDK.unregisterMenuButtonUpListener(this);
-		OuyaSDK.unregisterMenuAppearingListener(this);
-		OuyaSDK.unregisterPauseListener(this);
-		OuyaSDK.unregisterResumeListener(this);
-		Input.ResetInputAxes();
-		*/
-}
+	}
 
 
 	//start is called on the frame when a scrip tis enabled just before any of the update methods are called for the first time.
 	void Start ()
 	{
+
+		//bool classSelectState = gameManager.GetComponent<GameManager>().ClassSelectState;
+
 		count = 0;
 		SetCountText();
 		winText.text = "";
@@ -65,14 +65,56 @@ public class PlayerController : MonoBehaviour
 	//Update is called every frame, if the MonoBehaviour is enabled.
 	void Update ()
 	{
+		Debug.Log ("Update", gameObject);
+		bool rockButton = inputHandler.pressed_U;
+		bool paperButton = inputHandler.pressed_Y;
+		bool scissorButton = inputHandler.pressed_A;
+/*
+		GUI.Label(new Rect(50, 260, 100, 20), "O " + OuyaInput.GetButton(OuyaButton.O, player));
+		GUI.Label(new Rect(50, 280, 100, 20), "U " + OuyaInput.GetButton(OuyaButton.U, player));
+		GUI.Label(new Rect(50, 300, 100, 20), "Y " + OuyaInput.GetButton(OuyaButton.Y, player));
+		GUI.Label(new Rect(50, 320, 100, 20), "A " + OuyaInput.GetButton(OuyaButton.A, player));
+		*/
 
+		// class selection
+		if (gameManager.ClassSelectState == true) 
+		{
+			if (rockButton == true)
+			{
+				Debug.Log ("Rock", gameObject);
+				//GetComponent(MeshFilter).mesh = Rock;
+				meshFilter.mesh = rockMesh;
+				//SetClass(OuyaPlayer, 0); //A yet uncreated function that sets current player to a class number, rock
+			
+			}
+			else if (paperButton == true)
+			{
+				Debug.Log ("Paper", gameObject);
+				meshFilter.mesh = paperMesh;
+				//SetClass(OuyaPlayer, 1);
+			}
+			else if (scissorButton == true)
+			{
+				Debug.Log ("Scissor", gameObject);
+				meshFilter.mesh = scissorMesh;
+				//SetClass(OuyaPlayer, 2);
+			}
+			else
+			{
+				Debug.Log ("no button conditions are true", gameObject);
+			}
+			
+		} else{
+			Debug.Log ("Class Select State is false", gameObject);
+		}
 	}
 	//fixed update is called every fixed framerate frame if monobehavior is enabled.
 	void FixedUpdate ()
 	{
 		//player controls
-		float moveHorizontal = inputHandler.x_Axis_LeftStick;
+		float moveHorizontal = inputHandler.x_Axis_LeftStick; //connect variables with external references
 		float moveVertical = inputHandler.y_Axis_LeftStick;
+
 
 		Vector3 movement = new Vector3 (moveHorizontal, 0.0f, moveVertical);
 
@@ -80,6 +122,8 @@ public class PlayerController : MonoBehaviour
 
 		//pickup stuff
 		//when player controller collides with an object, create a collider variable and name it "other".
+
+
 	}
 
 	void OnTriggerEnter(Collider other) 

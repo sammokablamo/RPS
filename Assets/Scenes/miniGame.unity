@@ -114,6 +114,14 @@ MonoBehaviour:
   triggerTreshold: .200000003
   x_Axis_LeftStick: 0
   y_Axis_LeftStick: 0
+  pressed_O: 0
+  pressed_U: 0
+  pressed_Y: 0
+  pressed_A: 0
+  down_O: 0
+  down_U: 0
+  down_Y: 0
+  down_A: 0
 --- !u!114 &32669249
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -128,6 +136,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   countText: {fileID: 0}
   winText: {fileID: 0}
+  gameManagerGameObject: {fileID: 1351448789}
+  rockMesh: {fileID: 4300000, guid: c60a640a95ce8004f8287ed22af32b9d, type: 3}
+  paperMesh: {fileID: 4300000, guid: efa62f3b13771b543aba85723db9d8b6, type: 3}
+  scissorMesh: {fileID: 4300000, guid: a22c75ce38fb9e44fa41ffa9c0701189, type: 3}
 --- !u!54 &32669250
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -186,7 +198,7 @@ MeshFilter:
     type: 2}
   m_PrefabInternal: {fileID: 2065484145}
   m_GameObject: {fileID: 32669247}
-  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: 4300000, guid: c60a640a95ce8004f8287ed22af32b9d, type: 3}
 --- !u!4 &32669254
 Transform:
   m_ObjectHideFlags: 0
@@ -1052,6 +1064,14 @@ MonoBehaviour:
   triggerTreshold: .200000003
   x_Axis_LeftStick: 0
   y_Axis_LeftStick: 0
+  pressed_O: 0
+  pressed_U: 0
+  pressed_Y: 0
+  pressed_A: 0
+  down_O: 0
+  down_U: 0
+  down_Y: 0
+  down_A: 0
 --- !u!114 &473458739
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1066,6 +1086,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   countText: {fileID: 0}
   winText: {fileID: 0}
+  gameManagerGameObject: {fileID: 1351448789}
+  rockMesh: {fileID: 4300000, guid: c60a640a95ce8004f8287ed22af32b9d, type: 3}
+  paperMesh: {fileID: 4300000, guid: efa62f3b13771b543aba85723db9d8b6, type: 3}
+  scissorMesh: {fileID: 4300000, guid: a22c75ce38fb9e44fa41ffa9c0701189, type: 3}
 --- !u!54 &473458740
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1124,7 +1148,7 @@ MeshFilter:
     type: 2}
   m_PrefabInternal: {fileID: 522296946}
   m_GameObject: {fileID: 473458737}
-  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: 4300000, guid: efa62f3b13771b543aba85723db9d8b6, type: 3}
 --- !u!4 &473458744
 Transform:
   m_ObjectHideFlags: 0
@@ -1179,6 +1203,26 @@ Prefab:
       propertyPath: player
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 3300000, guid: e5eacba72e28ec84baa13b9d9fd81baa, type: 2}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 4300000, guid: efa62f3b13771b543aba85723db9d8b6, type: 3}
+    - target: {fileID: 11400000, guid: e5eacba72e28ec84baa13b9d9fd81baa, type: 2}
+      propertyPath: gameManagerGameObject
+      value: 
+      objectReference: {fileID: 1351448789}
+    - target: {fileID: 11400000, guid: e5eacba72e28ec84baa13b9d9fd81baa, type: 2}
+      propertyPath: paperMesh
+      value: 
+      objectReference: {fileID: 4300000, guid: efa62f3b13771b543aba85723db9d8b6, type: 3}
+    - target: {fileID: 11400000, guid: e5eacba72e28ec84baa13b9d9fd81baa, type: 2}
+      propertyPath: rockMesh
+      value: 
+      objectReference: {fileID: 4300000, guid: c60a640a95ce8004f8287ed22af32b9d, type: 3}
+    - target: {fileID: 11400000, guid: e5eacba72e28ec84baa13b9d9fd81baa, type: 2}
+      propertyPath: scissorMesh
+      value: 
+      objectReference: {fileID: 4300000, guid: a22c75ce38fb9e44fa41ffa9c0701189, type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e5eacba72e28ec84baa13b9d9fd81baa, type: 2}
   m_RootGameObject: {fileID: 473458737}
@@ -1412,7 +1456,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 663192706}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1ca5f80da8c75424d8b520185b0565f6, type: 3}
   m_Name: 
@@ -1461,6 +1505,26 @@ Prefab:
       propertyPath: player
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 3300000, guid: e5eacba72e28ec84baa13b9d9fd81baa, type: 2}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 4300000, guid: a22c75ce38fb9e44fa41ffa9c0701189, type: 3}
+    - target: {fileID: 11400000, guid: e5eacba72e28ec84baa13b9d9fd81baa, type: 2}
+      propertyPath: gameManagerGameObject
+      value: 
+      objectReference: {fileID: 1351448789}
+    - target: {fileID: 11400000, guid: e5eacba72e28ec84baa13b9d9fd81baa, type: 2}
+      propertyPath: rockMesh
+      value: 
+      objectReference: {fileID: 4300000, guid: c60a640a95ce8004f8287ed22af32b9d, type: 3}
+    - target: {fileID: 11400000, guid: e5eacba72e28ec84baa13b9d9fd81baa, type: 2}
+      propertyPath: paperMesh
+      value: 
+      objectReference: {fileID: 4300000, guid: efa62f3b13771b543aba85723db9d8b6, type: 3}
+    - target: {fileID: 11400000, guid: e5eacba72e28ec84baa13b9d9fd81baa, type: 2}
+      propertyPath: scissorMesh
+      value: 
+      objectReference: {fileID: 4300000, guid: a22c75ce38fb9e44fa41ffa9c0701189, type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e5eacba72e28ec84baa13b9d9fd81baa, type: 2}
   m_RootGameObject: {fileID: 1280907900}
@@ -1645,8 +1709,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67ff64b2ebfbfef4e82918393ae83749, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  countText: {fileID: 0}
-  winText: {fileID: 0}
+  countText: {fileID: 65960094}
+  winText: {fileID: 52104875}
+  gameManagerGameObject: {fileID: 1351448789}
+  rockMesh: {fileID: 4300000, guid: c60a640a95ce8004f8287ed22af32b9d, type: 3}
+  paperMesh: {fileID: 4300000, guid: efa62f3b13771b543aba85723db9d8b6, type: 3}
+  scissorMesh: {fileID: 4300000, guid: a22c75ce38fb9e44fa41ffa9c0701189, type: 3}
 --- !u!54 &963254177
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1679,7 +1747,7 @@ Renderer:
   - {fileID: 10302, guid: 0000000000000000f000000000000000, type: 0}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
-  m_UseLightProbes: 0
+  m_UseLightProbes: 1
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
   m_SortingLayer: 0
@@ -1705,7 +1773,7 @@ MeshFilter:
     type: 2}
   m_PrefabInternal: {fileID: 1932584762}
   m_GameObject: {fileID: 963254175}
-  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: 4300000, guid: efa62f3b13771b543aba85723db9d8b6, type: 3}
 --- !u!4 &963254181
 Transform:
   m_ObjectHideFlags: 0
@@ -1736,6 +1804,14 @@ MonoBehaviour:
   triggerTreshold: .200000003
   x_Axis_LeftStick: 0
   y_Axis_LeftStick: 0
+  pressed_O: 0
+  pressed_U: 0
+  pressed_Y: 0
+  pressed_A: 0
+  down_O: 0
+  down_U: 0
+  down_Y: 0
+  down_A: 0
 --- !u!1 &1036050559
 GameObject:
   m_ObjectHideFlags: 0
@@ -2174,6 +2250,14 @@ MonoBehaviour:
   triggerTreshold: .200000003
   x_Axis_LeftStick: 0
   y_Axis_LeftStick: 0
+  pressed_O: 0
+  pressed_U: 0
+  pressed_Y: 0
+  pressed_A: 0
+  down_O: 0
+  down_U: 0
+  down_Y: 0
+  down_A: 0
 --- !u!114 &1280907902
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2188,6 +2272,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   countText: {fileID: 0}
   winText: {fileID: 0}
+  gameManagerGameObject: {fileID: 1351448789}
+  rockMesh: {fileID: 4300000, guid: c60a640a95ce8004f8287ed22af32b9d, type: 3}
+  paperMesh: {fileID: 4300000, guid: efa62f3b13771b543aba85723db9d8b6, type: 3}
+  scissorMesh: {fileID: 4300000, guid: a22c75ce38fb9e44fa41ffa9c0701189, type: 3}
 --- !u!54 &1280907903
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2246,7 +2334,7 @@ MeshFilter:
     type: 2}
   m_PrefabInternal: {fileID: 696030019}
   m_GameObject: {fileID: 1280907900}
-  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: 4300000, guid: a22c75ce38fb9e44fa41ffa9c0701189, type: 3}
 --- !u!4 &1280907907
 Transform:
   m_ObjectHideFlags: 0
@@ -2460,6 +2548,45 @@ Prefab:
   m_RootGameObject: {fileID: 1503159057}
   m_IsPrefabParent: 0
   m_IsExploded: 1
+--- !u!1 &1351448789
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1351448791}
+  - 114: {fileID: 1351448790}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: GameManager
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1351448790
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1351448789}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc77137671ee303429a7b376e45479e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ClassSelectState: 1
+--- !u!4 &1351448791
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1351448789}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
 --- !u!1 &1404132672
 GameObject:
   m_ObjectHideFlags: 0
@@ -3288,6 +3415,42 @@ Prefab:
       propertyPath: m_Name
       value: Player_1
       objectReference: {fileID: 0}
+    - target: {fileID: 3300000, guid: e5eacba72e28ec84baa13b9d9fd81baa, type: 2}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 4300000, guid: efa62f3b13771b543aba85723db9d8b6, type: 3}
+    - target: {fileID: 2300000, guid: e5eacba72e28ec84baa13b9d9fd81baa, type: 2}
+      propertyPath: m_UseLightProbes
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: e5eacba72e28ec84baa13b9d9fd81baa, type: 2}
+      propertyPath: countText
+      value: 
+      objectReference: {fileID: 65960094}
+    - target: {fileID: 11400000, guid: e5eacba72e28ec84baa13b9d9fd81baa, type: 2}
+      propertyPath: winText
+      value: 
+      objectReference: {fileID: 52104875}
+    - target: {fileID: 11400000, guid: e5eacba72e28ec84baa13b9d9fd81baa, type: 2}
+      propertyPath: gameManagerGameObject
+      value: 
+      objectReference: {fileID: 1351448789}
+    - target: {fileID: 11400000, guid: e5eacba72e28ec84baa13b9d9fd81baa, type: 2}
+      propertyPath: classMeshArray
+      value: 
+      objectReference: {fileID: 4300000, guid: c60a640a95ce8004f8287ed22af32b9d, type: 3}
+    - target: {fileID: 11400000, guid: e5eacba72e28ec84baa13b9d9fd81baa, type: 2}
+      propertyPath: paperMesh
+      value: 
+      objectReference: {fileID: 4300000, guid: efa62f3b13771b543aba85723db9d8b6, type: 3}
+    - target: {fileID: 11400000, guid: e5eacba72e28ec84baa13b9d9fd81baa, type: 2}
+      propertyPath: rockMesh
+      value: 
+      objectReference: {fileID: 4300000, guid: c60a640a95ce8004f8287ed22af32b9d, type: 3}
+    - target: {fileID: 11400000, guid: e5eacba72e28ec84baa13b9d9fd81baa, type: 2}
+      propertyPath: scissorMesh
+      value: 
+      objectReference: {fileID: 4300000, guid: a22c75ce38fb9e44fa41ffa9c0701189, type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e5eacba72e28ec84baa13b9d9fd81baa, type: 2}
   m_RootGameObject: {fileID: 963254175}
@@ -3752,6 +3915,26 @@ Prefab:
       propertyPath: player
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 3300000, guid: e5eacba72e28ec84baa13b9d9fd81baa, type: 2}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 4300000, guid: c60a640a95ce8004f8287ed22af32b9d, type: 3}
+    - target: {fileID: 11400000, guid: e5eacba72e28ec84baa13b9d9fd81baa, type: 2}
+      propertyPath: rockMesh
+      value: 
+      objectReference: {fileID: 4300000, guid: c60a640a95ce8004f8287ed22af32b9d, type: 3}
+    - target: {fileID: 11400000, guid: e5eacba72e28ec84baa13b9d9fd81baa, type: 2}
+      propertyPath: paperMesh
+      value: 
+      objectReference: {fileID: 4300000, guid: efa62f3b13771b543aba85723db9d8b6, type: 3}
+    - target: {fileID: 11400000, guid: e5eacba72e28ec84baa13b9d9fd81baa, type: 2}
+      propertyPath: scissorMesh
+      value: 
+      objectReference: {fileID: 4300000, guid: a22c75ce38fb9e44fa41ffa9c0701189, type: 3}
+    - target: {fileID: 11400000, guid: e5eacba72e28ec84baa13b9d9fd81baa, type: 2}
+      propertyPath: gameManagerGameObject
+      value: 
+      objectReference: {fileID: 1351448789}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e5eacba72e28ec84baa13b9d9fd81baa, type: 2}
   m_RootGameObject: {fileID: 32669247}

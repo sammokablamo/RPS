@@ -45,7 +45,20 @@ public class InputHandler : MonoBehaviour
 	public float x_Axis_LeftStick;
 	public float y_Axis_LeftStick;
 
-	
+	//fucking around, can't figure out why it only checks once
+
+	public bool pressed_O;
+	public bool pressed_U;
+	public bool pressed_Y;
+	public bool pressed_A;
+
+	public bool down_O;
+	public bool down_U;
+	public bool down_Y;
+	public bool down_A;
+
+
+
 	/* -----------------------------------------------------------------------------------
 	 * INITIAL SETUP
 	 */
@@ -114,10 +127,10 @@ public class InputHandler : MonoBehaviour
 		/* GET PRESSED STATES FOR CONTROLLER BUTTONS */
 		
 		// O U Y A buttons
-		bool pressed_O = OuyaInput.GetButton(OuyaButton.O, player);
-		bool pressed_U = OuyaInput.GetButton(OuyaButton.U, player);
-		bool pressed_Y = OuyaInput.GetButton(OuyaButton.Y, player);
-		bool pressed_A = OuyaInput.GetButton(OuyaButton.A, player);
+		pressed_O = OuyaInput.GetButton(OuyaButton.O, player);
+		pressed_U = OuyaInput.GetButton(OuyaButton.U, player);
+		pressed_Y = OuyaInput.GetButton(OuyaButton.Y, player);
+		pressed_A = OuyaInput.GetButton(OuyaButton.A, player);
 		
 		// joystick click down buttons
 		bool pressed_LeftStick	= OuyaInput.GetButton(OuyaButton.L3, player);
@@ -143,10 +156,10 @@ public class InputHandler : MonoBehaviour
 		if (continuousScan)
 		{
 			// O U Y A buttons
-			bool down_O = OuyaInput.GetButtonDown(OuyaButton.O, player);
-			bool down_U = OuyaInput.GetButtonDown(OuyaButton.U, player);
-			bool down_Y = OuyaInput.GetButtonDown(OuyaButton.Y, player);
-			bool down_A = OuyaInput.GetButtonDown(OuyaButton.A, player);
+			down_O = OuyaInput.GetButtonDown(OuyaButton.O, player);
+			down_U = OuyaInput.GetButtonDown(OuyaButton.U, player);
+			down_Y = OuyaInput.GetButtonDown(OuyaButton.Y, player);
+			down_A = OuyaInput.GetButtonDown(OuyaButton.A, player);
 		
 			// joystick click down buttons
 			bool down_LeftStick	= OuyaInput.GetButtonDown(OuyaButton.L3, player);
