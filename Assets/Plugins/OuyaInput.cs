@@ -1834,18 +1834,18 @@ public static class OuyaInput
 
 				/* UNKNOWN MAPPINGS */
 				case OuyaMapType.Unknown:
-				// we hope to catch any unkown bluetooth controllers here (wild card)
+				// we hope to catch any unknown bluetooth controllers here (wild card)
 				// there can't be any testing for that as it's just a random try
 				switch (button)
 				{
 					// ouya buttons
-					case OuyaButton.O:		return GetButton(0, buttonAction, mapPlayer);
-					case OuyaButton.U:		return GetButton(3, buttonAction, mapPlayer);
-					case OuyaButton.Y:		return GetButton(4, buttonAction, mapPlayer);
-					case OuyaButton.A:		return GetButton(1, buttonAction, mapPlayer);
+					case OuyaButton.O:		return GetButton(4, buttonAction, mapPlayer);
+					case OuyaButton.U:		return GetButton(2, buttonAction, mapPlayer);
+					case OuyaButton.Y:		return GetButton(3, buttonAction, mapPlayer);//confirmed
+					case OuyaButton.A:		return GetButton(1, buttonAction, mapPlayer);//confirmed
 
 					// shoulder buttons
-					case OuyaButton.LB:		return GetButton(6, buttonAction, mapPlayer);
+					case OuyaButton.LB:		return GetButton(4, buttonAction, mapPlayer);
 					case OuyaButton.RB:		return GetButton(7, buttonAction, mapPlayer);
 
 					// stick buttons
