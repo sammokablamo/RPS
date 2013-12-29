@@ -1038,6 +1038,7 @@ GameObject:
   - 54: {fileID: 473458740}
   - 114: {fileID: 473458739}
   - 114: {fileID: 473458738}
+  - 114: {fileID: 473458745}
   m_Layer: 0
   m_Name: Player_2
   m_TagString: Untagged
@@ -1160,6 +1161,24 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
+--- !u!114 &473458745
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 473458737}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e694dcdaa804e83448fa73e17abd5d03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  debug: 1
+  continuousScan: 1
+  observedPlayer: 2
+  deadzoneType: 2
+  deadzone: .25
+  triggerThreshold: .100000001
+  p2Offset: 400
 --- !u!1001 &522296946
 Prefab:
   m_ObjectHideFlags: 0

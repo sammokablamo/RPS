@@ -1167,6 +1167,7 @@ public static class OuyaInput
 		return GetButton(button, ButtonAction.UpFrame, player);
 	}
 	#endregion
+	
 
 	/* -----------------------------------------------------------------------------------
 	 * PRIVATE HELPER PROCEDURES
@@ -1326,46 +1327,50 @@ public static class OuyaInput
 					default: return false;
 				}
 
+				/********************************************************
+				 * THIS IS WHERE OUYA BUTTON MAPPINGS ARE!***************
+				 * ******************************************************/
+
 				case OuyaMapType.Ouya_CONSOLE:	
 				// tested mapping for: OUYA console with native controller
 				// connected via standard Bluetooth
+				//SAM: THIS IS THE SECTION I REPLACED. This was caused by Unity changing their mappings in 4.3 copied from
+				//http://forums.ouya.tv/discussion/1678/new-ouyainput-controller-framework-simple-fast-with-documantation/p6
 				switch (button)
 				{
-					// OUYA buttons	
-					case OuyaButton.O:		return GetButton(0, buttonAction, mapPlayer);		// checked
-					case OuyaButton.U:		return GetButton(1, buttonAction, mapPlayer);		// checked
-					case OuyaButton.Y:		return GetButton(2, buttonAction, mapPlayer);		// checked
-					case OuyaButton.A:		return GetButton(3, buttonAction, mapPlayer);		// checked
-
+					// ouya buttons
+				case OuyaButton.O: return GetButton(0, buttonAction, mapPlayer); // checked
+				case OuyaButton.U: return GetButton(2, buttonAction, mapPlayer); // checked
+				case OuyaButton.Y: return GetButton(3, buttonAction, mapPlayer); // checked
+				case OuyaButton.A: return GetButton(1, buttonAction, mapPlayer); // checked
+					
 					// shoulder buttons
-					case OuyaButton.LB: 	return GetButton(4, buttonAction, mapPlayer);		// checked
-					case OuyaButton.RB: 	return GetButton(5, buttonAction, mapPlayer);		// checked
-
+				case OuyaButton.LB: return GetButton(4, buttonAction, mapPlayer); // checked
+				case OuyaButton.RB: return GetButton(5, buttonAction, mapPlayer); // checked
+					
 					// stick buttons
-					case OuyaButton.L3:		return GetButton(6, buttonAction, mapPlayer);		// checked
-					case OuyaButton.R3:		return GetButton(7, buttonAction, mapPlayer);		// checked
-
+				case OuyaButton.L3: return GetButton(8, buttonAction, mapPlayer); // checked
+				case OuyaButton.R3: return GetButton(9, buttonAction, mapPlayer); // checked
+					
 					// d-pad buttons
-					case OuyaButton.DU:		return GetButton(8, buttonAction, mapPlayer);		// checked
-					case OuyaButton.DD:		return GetButton(9, buttonAction, mapPlayer);		// checked
-					case OuyaButton.DL:		return GetButton(10, buttonAction, mapPlayer);		// checked
-					case OuyaButton.DR:		return GetButton(11, buttonAction, mapPlayer);		// checked
-
+				case OuyaButton.DU: return !GetCachedButtonEvent(OuyaButton.RT, buttonAction, playerIndex); // checked
+				case OuyaButton.DD: return GetCachedButtonEvent(OuyaButton.RT, buttonAction, playerIndex); // checked
+				case OuyaButton.DL: return !GetCachedButtonEvent(OuyaButton.LT, buttonAction, playerIndex); // checked
+				case OuyaButton.DR: return GetCachedButtonEvent(OuyaButton.LT, buttonAction, playerIndex); // checked
+					
 					// trigger buttons
 					// although button states are natively supported we use axis conversion
-					// the button numbers we do not use are: LT 12 / RR 13
 					// this is because trigger buttons will natively only react on full pullthrough
-					// this feels very unresponsive and can be solved by evaluating the axis input values
-					// these two axis and do not give out UP or DOWN events natively
-					// we use button state management and continious scanning to provide these	
-					case OuyaButton.LT: return GetCachedButtonEvent(button, buttonAction, playerIndex);														
-					case OuyaButton.RT: return GetCachedButtonEvent(button, buttonAction, playerIndex);
-
-					// not defined so far â€“ or don't exist on OUYA
-					case OuyaButton.START: 	return false;
-					case OuyaButton.SYSTEM: return false;
-					case OuyaButton.SELECT: return false;	
-					default: return false;
+					// these buttons then are two axis and do not give out UP or DOWN events natively
+					// we use button state management and continious scanning to provide these                     
+				case OuyaButton.LT: return GetButton(6, buttonAction, mapPlayer);
+				case OuyaButton.RT: return GetButton(7, buttonAction, mapPlayer);
+					
+					// not defined so far â€“ or don't exist
+				case OuyaButton.START: return false;
+				case OuyaButton.SYSTEM: return false;
+				case OuyaButton.SELECT: return false;
+				default: return false;
 				}
 
 				case OuyaMapType.XBOX360_ANDROID:
@@ -1482,14 +1487,14 @@ public static class OuyaInput
 					case OuyaButton.RT: 	return GetButton(9, buttonAction, mapPlayer);		// checked
 
 					// shoulder buttons
-					case OuyaButton.LB:		return GetButton(10, buttonAction, mapPlayer);		// checked
+					case OuyaButton.LB:		return GetButton(12, buttonAction, mapPlayer);		// checked
 					case OuyaButton.RB:		return GetButton(11, buttonAction, mapPlayer);		// checked
 
 					// OUYA buttons
 					case OuyaButton.O:		return GetButton(14, buttonAction, mapPlayer);		// checked
-					case OuyaButton.U:		return GetButton(15, buttonAction, mapPlayer);		// checked
-					case OuyaButton.Y:		return GetButton(12, buttonAction, mapPlayer);		// checked
-					case OuyaButton.A:		return GetButton(13, buttonAction, mapPlayer);		// checked
+					case OuyaButton.U:		return GetButton(10, buttonAction, mapPlayer);		// checked
+					case OuyaButton.Y:		return GetButton(13, buttonAction, mapPlayer);		// checked
+					case OuyaButton.A:		return GetButton(15, buttonAction, mapPlayer);		// checked
 
 					// not defined do far
 					case OuyaButton.SYSTEM: return false;	
