@@ -16,11 +16,15 @@
 
 using UnityEngine;
 
+
+
 public class OuyaSceneInit : MonoBehaviour
 {
-    public string NextScene = "SceneSplash";
+	public string NextScene = "SceneSplash";
 
-    public void Start()
+
+
+	public void Start()
     {
         Application.LoadLevel(NextScene);
     }

@@ -88,7 +88,6 @@ GameObject:
   - 54: {fileID: 32669250}
   - 114: {fileID: 32669249}
   - 114: {fileID: 32669248}
-  - 114: {fileID: 32669255}
   m_Layer: 0
   m_Name: Player_4
   m_TagString: Untagged
@@ -211,23 +210,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
---- !u!114 &32669255
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 32669247}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: effdd7bc153f3e14ba53b6d35340c72b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  debug: 1
-  continuousScan: 1
-  observedPlayer: 4
-  deadzoneType: 2
-  deadzone: .25
-  triggerThreshold: .100000001
 --- !u!1 &33292943
 GameObject:
   m_ObjectHideFlags: 0
@@ -1712,6 +1694,7 @@ GameObject:
   - 54: {fileID: 963254177}
   - 114: {fileID: 963254176}
   - 114: {fileID: 963254182}
+  - 114: {fileID: 963254183}
   m_Layer: 0
   m_Name: Player_1
   m_TagString: Untagged
@@ -1834,6 +1817,23 @@ MonoBehaviour:
   down_U: 0
   down_Y: 0
   down_A: 0
+--- !u!114 &963254183
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 963254175}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: effdd7bc153f3e14ba53b6d35340c72b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  debug: 1
+  continuousScan: 1
+  observedPlayer: 1
+  deadzoneType: 2
+  deadzone: .25
+  triggerThreshold: .100000001
 --- !u!1 &1036050559
 GameObject:
   m_ObjectHideFlags: 0

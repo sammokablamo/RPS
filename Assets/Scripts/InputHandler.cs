@@ -20,6 +20,9 @@ using UnityEngine;
 using System.Collections;
 
 public class InputHandler : MonoBehaviour
+	//OuyaInput.Platform,
+	//OuyaInput.SetContinuousScanning,
+	//OuyaInput.SetPlugCheckInterval
 {
 	// attach this script to any GameObject
 	// in most cases this sits on the object that should be controlled via input
@@ -27,7 +30,7 @@ public class InputHandler : MonoBehaviour
 	// there is no GUI showing the results as I wanted to make this simple, reusable and clean
 	
 	/* INSPECTOR */ 
-	
+
 	// do we want to scan for trigger and d-pad button events ?
 	public bool continuousScan = true;
 	
@@ -67,7 +70,7 @@ public class InputHandler : MonoBehaviour
 	{
 		//Controller framework: setup what platform you're on.
 		//public static void SetEditorPlatform(EditorWorkPlatform workPlatform);
-		//OuyaInput.SetEditorPlatform(Platform Android);
+		//OuyaInput.Platform(Android);
 
 		// OPTIONAL: set button state scanning to receive input state events for trigger and d-pads
 		OuyaInput.SetContinuousScanning(continuousScan);
