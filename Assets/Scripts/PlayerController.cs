@@ -33,6 +33,7 @@ public class PlayerController : MonoBehaviour
 
 	//reference for mesh filter
 	private MeshFilter meshFilter;
+	private MeshFilter otherMeshFilter;
 
 	void Awake() //Awake is called when the script instance is being loaded.
 	{
@@ -66,7 +67,7 @@ public class PlayerController : MonoBehaviour
 	//Update is called every frame, if the MonoBehaviour is enabled.
 	void Update ()
 	{
-		Debug.Log ("Update", gameObject);
+		//Debug.Log ("Update", gameObject);
 		bool rockButton = inputHandler.down_U;
 		bool paperButton = inputHandler.down_Y;
 		bool scissorButton = inputHandler.down_A;
@@ -101,7 +102,7 @@ public class PlayerController : MonoBehaviour
 			}
 			else
 			{
-				Debug.Log ("no button conditions are true", gameObject);
+				//Debug.Log ("no button conditions are true", gameObject);
 			}
 			
 		} else{
@@ -136,6 +137,49 @@ public class PlayerController : MonoBehaviour
 			//increment count by one.
 			count = count + 1;
 			SetCountText();
+			//set active to false, turning it off.
+			other.gameObject.SetActive(false);
+			//increment count by one.
+			count = count + 1;
+			SetCountText();
+			Debug.Log ("PickedStuffUp", gameObject);
+		}
+
+		if (other.gameObject.tag == "Player")
+		{
+		
+			otherMeshFilter = other.gameObject.GetComponent<MeshFilter>();
+			Debug.Log ("What's in RockMeshTostring? " + rockMesh.ToString(), gameObject);
+			//Debug.Log ("Hit a " + otherMeshFilter.mesh.ToString(), gameObject);
+			Debug.Log ("I am a " + meshFilter.mesh.ToString() + "EndOfString", gameObject); 
+	
+			bool same = meshFilter.mesh.ToString() == otherMeshFilter.mesh.ToString();
+
+			if (meshFilter.mesh.ToString() == otherMeshFilter.mesh.ToString()) //Debug.Log ("Are we the same? " + same, gameObject);
+			{
+				Debug.Log ("We're the same, do nothing.", gameObject);
+			}
+			if (meshFilter.mesh.ToString() == "Rock Instance (UnityEngine.Mesh)") //this may not be the best way but it works...
+			{
+				//Debug.Log ("I'm a rock.", gameObject);
+				if (otherMeshFilter.mesh.ToString() == "Scissors Instance (UnityEngine.Mesh)")
+				{
+					//Debug.Log ("...and the other thing is scissor.", gameObject);
+					other.gameObject.SetActive(false);
+					Debug.Log ("Killed a scissor", gameObject);
+				}
+			}
+			if (meshFilter.mesh.ToString() == "Scissors Instance (UnityEngine.Mesh)" && otherMeshFilter.mesh.ToString() == "Paper Instance (UnityEngine.Mesh)" ) 
+			{
+				other.gameObject.SetActive(false);
+				Debug.Log ("Killed a paper", gameObject);
+			}
+			if (meshFilter.mesh.ToString() == "Paper Instance (UnityEngine.Mesh)" && otherMeshFilter.mesh.ToString() == "Rock Instance (UnityEngine.Mesh)" ) 
+			{
+				other.gameObject.SetActive(false);
+				Debug.Log ("Killed a rock", gameObject);
+			}
+
 		}
 	}
 
