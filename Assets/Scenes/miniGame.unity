@@ -135,8 +135,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67ff64b2ebfbfef4e82918393ae83749, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  countText: {fileID: 0}
-  winText: {fileID: 0}
   gameManagerGameObject: {fileID: 1351448789}
   rockMesh: {fileID: 4300000, guid: c60a640a95ce8004f8287ed22af32b9d, type: 3}
   paperMesh: {fileID: 4300000, guid: efa62f3b13771b543aba85723db9d8b6, type: 3}
@@ -224,6 +222,56 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: .550000012
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &32693762
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 32693763}
+  - 132: {fileID: 32693764}
+  m_Layer: 0
+  m_Name: PlayerScoreText_4
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &32693763
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 32693762}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 33292944}
+--- !u!132 &32693764
+GUIText:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 32693762}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Text: Gui Text
+  m_Anchor: 8
+  m_Alignment: 2
+  m_PixelOffset: {x: -10, y: 30}
+  m_LineSpacing: 1
+  m_TabSize: 4
+  m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+  m_Material: {fileID: 0}
+  m_FontSize: 20
+  m_FontStyle: 0
+  m_Color:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_PixelCorrect: 1
+  m_RichText: 1
 --- !u!1 &33292943
 GameObject:
   m_ObjectHideFlags: 0
@@ -249,109 +297,11 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 65960095}
-  - {fileID: 52104874}
+  - {fileID: 571675120}
+  - {fileID: 867371908}
+  - {fileID: 133521164}
+  - {fileID: 32693763}
   m_Father: {fileID: 0}
---- !u!1 &52104873
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 52104874}
-  - 132: {fileID: 52104875}
-  m_Layer: 0
-  m_Name: Win Text
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &52104874
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 52104873}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: .5, y: .75, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 33292944}
---- !u!132 &52104875
-GUIText:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 52104873}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Text: Gui Text
-  m_Anchor: 4
-  m_Alignment: 1
-  m_PixelOffset: {x: 0, y: 0}
-  m_LineSpacing: 1
-  m_TabSize: 4
-  m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-  m_Material: {fileID: 0}
-  m_FontSize: 0
-  m_FontStyle: 0
-  m_Color:
-    serializedVersion: 2
-    rgba: 4294967295
-  m_PixelCorrect: 1
-  m_RichText: 1
---- !u!1 &65960093
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 65960095}
-  - 132: {fileID: 65960094}
-  m_Layer: 0
-  m_Name: Count Text
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!132 &65960094
-GUIText:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 65960093}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Text: Gui Text
-  m_Anchor: 0
-  m_Alignment: 0
-  m_PixelOffset: {x: 10, y: -10}
-  m_LineSpacing: 1
-  m_TabSize: 4
-  m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-  m_Material: {fileID: 0}
-  m_FontSize: 0
-  m_FontStyle: 0
-  m_Color:
-    serializedVersion: 2
-    rgba: 4294967295
-  m_PixelCorrect: 1
-  m_RichText: 1
---- !u!4 &65960095
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 65960093}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 33292944}
 --- !u!1 &82861240
 GameObject:
   m_ObjectHideFlags: 0
@@ -502,6 +452,56 @@ Prefab:
   m_RootGameObject: {fileID: 82861240}
   m_IsPrefabParent: 0
   m_IsExploded: 1
+--- !u!1 &133521163
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 133521164}
+  - 132: {fileID: 133521165}
+  m_Layer: 0
+  m_Name: PlayerScoreText_3
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &133521164
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 133521163}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 33292944}
+--- !u!132 &133521165
+GUIText:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 133521163}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Text: Gui Text
+  m_Anchor: 6
+  m_Alignment: 0
+  m_PixelOffset: {x: 10, y: 30}
+  m_LineSpacing: 1
+  m_TabSize: 4
+  m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+  m_Material: {fileID: 0}
+  m_FontSize: 20
+  m_FontStyle: 0
+  m_Color:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_PixelCorrect: 1
+  m_RichText: 1
 --- !u!1 &138184801
 GameObject:
   m_ObjectHideFlags: 0
@@ -1099,8 +1099,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67ff64b2ebfbfef4e82918393ae83749, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  countText: {fileID: 0}
-  winText: {fileID: 0}
   gameManagerGameObject: {fileID: 1351448789}
   rockMesh: {fileID: 4300000, guid: c60a640a95ce8004f8287ed22af32b9d, type: 3}
   paperMesh: {fileID: 4300000, guid: efa62f3b13771b543aba85723db9d8b6, type: 3}
@@ -1308,6 +1306,56 @@ Prefab:
   m_RootGameObject: {fileID: 2051502104}
   m_IsPrefabParent: 0
   m_IsExploded: 1
+--- !u!1 &571675119
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 571675120}
+  - 132: {fileID: 571675121}
+  m_Layer: 0
+  m_Name: PlayerScoreText_1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &571675120
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 571675119}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 33292944}
+--- !u!132 &571675121
+GUIText:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 571675119}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Text: Gui Text
+  m_Anchor: 0
+  m_Alignment: 0
+  m_PixelOffset: {x: 10, y: -10}
+  m_LineSpacing: 1
+  m_TabSize: 4
+  m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+  m_Material: {fileID: 0}
+  m_FontSize: 20
+  m_FontStyle: 0
+  m_Color:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_PixelCorrect: 1
+  m_RichText: 1
 --- !u!1 &635487328
 GameObject:
   m_ObjectHideFlags: 0
@@ -1570,6 +1618,56 @@ Prefab:
   m_RootGameObject: {fileID: 1280907900}
   m_IsPrefabParent: 0
   m_IsExploded: 1
+--- !u!1 &867371907
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 867371908}
+  - 132: {fileID: 867371909}
+  m_Layer: 0
+  m_Name: PlayerScoreText_2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &867371908
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 867371907}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1, y: 1, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 33292944}
+--- !u!132 &867371909
+GUIText:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 867371907}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Text: Gui Text
+  m_Anchor: 2
+  m_Alignment: 2
+  m_PixelOffset: {x: -10, y: -10}
+  m_LineSpacing: 1
+  m_TabSize: 4
+  m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+  m_Material: {fileID: 0}
+  m_FontSize: 20
+  m_FontStyle: 0
+  m_Color:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_PixelCorrect: 1
+  m_RichText: 1
 --- !u!1 &884319664
 GameObject:
   m_ObjectHideFlags: 0
@@ -1750,8 +1848,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67ff64b2ebfbfef4e82918393ae83749, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  countText: {fileID: 65960094}
-  winText: {fileID: 52104875}
   gameManagerGameObject: {fileID: 1351448789}
   rockMesh: {fileID: 4300000, guid: c60a640a95ce8004f8287ed22af32b9d, type: 3}
   paperMesh: {fileID: 4300000, guid: efa62f3b13771b543aba85723db9d8b6, type: 3}
@@ -2325,8 +2421,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67ff64b2ebfbfef4e82918393ae83749, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  countText: {fileID: 0}
-  winText: {fileID: 0}
   gameManagerGameObject: {fileID: 1351448789}
   rockMesh: {fileID: 4300000, guid: c60a640a95ce8004f8287ed22af32b9d, type: 3}
   paperMesh: {fileID: 4300000, guid: efa62f3b13771b543aba85723db9d8b6, type: 3}
@@ -2644,6 +2738,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ClassSelectState: 1
+  PlayerScoreText_1: {fileID: 571675121}
+  PlayerScoreText_2: {fileID: 867371909}
+  PlayerScoreText_3: {fileID: 133521165}
+  PlayerScoreText_4: {fileID: 32693764}
+  PlayerScores: 
 --- !u!4 &1351448791
 Transform:
   m_ObjectHideFlags: 0
@@ -4076,11 +4175,11 @@ Prefab:
     - target: {fileID: 11400000, guid: e5eacba72e28ec84baa13b9d9fd81baa, type: 2}
       propertyPath: countText
       value: 
-      objectReference: {fileID: 65960094}
+      objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: e5eacba72e28ec84baa13b9d9fd81baa, type: 2}
       propertyPath: winText
       value: 
-      objectReference: {fileID: 52104875}
+      objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: e5eacba72e28ec84baa13b9d9fd81baa, type: 2}
       propertyPath: gameManagerGameObject
       value: 

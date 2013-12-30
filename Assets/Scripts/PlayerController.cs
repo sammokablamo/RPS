@@ -7,19 +7,10 @@ public class PlayerController : MonoBehaviour
 	//Ouya Controller variables
 	//private const float INNER_DEADZONE = 0.3f;
 	
-	private const float MOVE_SPEED = 100f;
-	
-	//public OuyaSDK.OuyaPlayer Index;
+	private const float MOVE_SPEED = 50f;
 
 	//player speed
 	//public float speed; 
-
-	//gui text variable
-	public GUIText countText;
-	public GUIText winText;
-
-	//counter
-	private int count;
 
 	private InputHandler inputHandler;//reference input handler, create a local variable version of class input handler
 	//reference GameManager's Gameobject
@@ -58,10 +49,6 @@ public class PlayerController : MonoBehaviour
 	{
 
 		//bool classSelectState = gameManager.GetComponent<GameManager>().ClassSelectState;
-
-		count = 0;
-		SetCountText();
-		winText.text = "";
 	}
 
 	//Update is called every frame, if the MonoBehaviour is enabled.
@@ -135,49 +122,47 @@ public class PlayerController : MonoBehaviour
 			//set active to false, turning it off.
 			other.gameObject.SetActive(false);
 			//increment count by one.
-			count = count + 1;
-			SetCountText();
+			//count = count + 1;
+			//SetCountText();
 			//set active to false, turning it off.
 			other.gameObject.SetActive(false);
 			//increment count by one.
-			count = count + 1;
-			SetCountText();
+			//count = count + 1;
+			//SetCountText();
 			Debug.Log ("PickedStuffUp", gameObject);
 		}
 
 		if (other.gameObject.tag == "Player")
 		{
 		
-			otherMeshFilter = other.gameObject.GetComponent<MeshFilter>();
-			Debug.Log ("What's in RockMeshTostring? " + rockMesh.ToString(), gameObject);
+			otherMeshFilter = other.gameObject.GetComponent<MeshFilter>(); //set reference to Mesh Filter component of other game object.
+			//Debug.Log ("What's in RockMeshTostring? " + rockMesh.ToString(), gameObject);
 			//Debug.Log ("Hit a " + otherMeshFilter.mesh.ToString(), gameObject);
-			Debug.Log ("I am a " + meshFilter.mesh.ToString() + "EndOfString", gameObject); 
+			//Debug.Log ("I am a " + meshFilter.mesh.ToString() + "EndOfString", gameObject); 
 	
 			bool same = meshFilter.mesh.ToString() == otherMeshFilter.mesh.ToString();
 
 			if (meshFilter.mesh.ToString() == otherMeshFilter.mesh.ToString()) //Debug.Log ("Are we the same? " + same, gameObject);
 			{
-				Debug.Log ("We're the same, do nothing.", gameObject);
+				//Debug.Log ("We're the same, do nothing.", gameObject);
 			}
-			if (meshFilter.mesh.ToString() == "Rock Instance (UnityEngine.Mesh)") //this may not be the best way but it works...
+			if (meshFilter.mesh.ToString() == "Rock Instance (UnityEngine.Mesh)" && otherMeshFilter.mesh.ToString() == "Scissors Instance (UnityEngine.Mesh)") //Am I a rock and the other thing is scissor.this may not be the best way but it works...
 			{
-				//Debug.Log ("I'm a rock.", gameObject);
-				if (otherMeshFilter.mesh.ToString() == "Scissors Instance (UnityEngine.Mesh)")
-				{
-					//Debug.Log ("...and the other thing is scissor.", gameObject);
-					other.gameObject.SetActive(false);
-					Debug.Log ("Killed a scissor", gameObject);
-				}
+				other.gameObject.SetActive(false); //turn off other object
+				gameManager.addToPlayerScore(inputHandler.player, 1);
+				//Debug.Log(inputHandler.player);
+				//Debug.Log ("Killed a scissor", gameObject);
 			}
-			if (meshFilter.mesh.ToString() == "Scissors Instance (UnityEngine.Mesh)" && otherMeshFilter.mesh.ToString() == "Paper Instance (UnityEngine.Mesh)" ) 
+			if (meshFilter.mesh.ToString() == "Scissors Instance (UnityEngine.Mesh)" && otherMeshFilter.mesh.ToString() == "Paper Instance (UnityEngine.Mesh)" ) //Am I scissors and is the other thing a paper instance?
 			{
-				other.gameObject.SetActive(false);
-				Debug.Log ("Killed a paper", gameObject);
+				other.gameObject.SetActive(false);//turn off other object
+				gameManager.addToPlayerScore(inputHandler.player, 1);
+				//Debug.Log ("Killed a paper", gameObject);
 			}
-			if (meshFilter.mesh.ToString() == "Paper Instance (UnityEngine.Mesh)" && otherMeshFilter.mesh.ToString() == "Rock Instance (UnityEngine.Mesh)" ) 
+			if (meshFilter.mesh.ToString() == "Paper Instance (UnityEngine.Mesh)" && otherMeshFilter.mesh.ToString() == "Rock Instance (UnityEngine.Mesh)" ) //Am I Paper and is the other thing Rock?
 			{
-				other.gameObject.SetActive(false);
-				Debug.Log ("Killed a rock", gameObject);
+				other.gameObject.SetActive(false);//turn off other object
+				gameManager.addToPlayerScore(inputHandler.player, 1);//Debug.Log ("Killed a rock", gameObject);
 			}
 
 		}
@@ -185,11 +170,11 @@ public class PlayerController : MonoBehaviour
 
 	void SetCountText()
 	{
-		countText.text = "Count: " + count.ToString ();
-		if (count >= 16) 
-		{
-			winText.text = "YOU WIN!";
-		}
+		//countText.text = "Count: " + count.ToString ();
+		//if (count >= 16) 
+		//{
+		//	winText.text = "YOU WIN!";
+		//}
 	}
 	public void OuyaMenuButtonUp()
 	{
