@@ -132,7 +132,7 @@ public class PlayerController : MonoBehaviour
 			//increment count by one.
 			//count = count + 1;
 			//SetCountText();
-			Debug.Log ("PickedStuffUp", gameObject);
+			//Debug.Log ("PickedStuffUp", gameObject);
 		}
 
 		if (other.gameObject.tag == "Player")
