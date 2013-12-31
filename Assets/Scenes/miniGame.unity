@@ -2743,6 +2743,7 @@ MonoBehaviour:
   PlayerScoreText_3: {fileID: 133521165}
   PlayerScoreText_4: {fileID: 32693764}
   PlayerScores: 
+  PlayersAlive: 
 --- !u!4 &1351448791
 Transform:
   m_ObjectHideFlags: 0

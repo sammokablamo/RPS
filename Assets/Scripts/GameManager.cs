@@ -6,57 +6,82 @@ public class GameManager : MonoBehaviour {
 	//is it time for selecting a player class?
 	public bool ClassSelectState;
 
+
+
+	private int numberOfPlayers = 4; //replace 4 with a variable pulled from elsewhere later
+
 	public GUIText PlayerScoreText_1;
 	public GUIText PlayerScoreText_2;
 	public GUIText PlayerScoreText_3;
 	public GUIText PlayerScoreText_4;
-
-	private int numberOfPlayers = 4; //replace 4 with a variable pulled from elsewhere later
 	
 	public int[] PlayerScores;
+
+	public bool[] PlayersAlive;
+
+	public enum PlayerClass {Rock = 0, Paper = 1, Scissor = 2};
+	//this is where i left off
+
 
 
 	// Use this for initialization
 	void Start () {
-		PlayerScores = new int[numberOfPlayers];
+		PlayerScores = new int[numberOfPlayers]; //create array of player scores
 		SetScoreText();
+
+		PlayersAlive = new bool[numberOfPlayers]; //create array of whether players are alive
+		for ( int i = 0; i < numberOfPlayers; i++) //set all players to be alive initially.
+		{
+			PlayersAlive[i] = true;//Debug.Log ( "Player " + i + " is alive?" + PlayersAlive[i] + ".");
+		}
+
 	}
 	
 	// Update is called once per frame
 	void Update () {
-
-		Debug.Log ( "Player 1:" + PlayerScores[0]);
-		Debug.Log ( "Player 2:" + PlayerScores[1]);
-		Debug.Log ( "Player 3:" + PlayerScores[2]);
-		Debug.Log ( "Player 4:" + PlayerScores[3]);
-
+	
+	playersLeftCheck();
 	}
 
+	public void setWhoDied(OuyaPlayer playerNumber)
+	{
+		int i = (int)playerNumber - 1; //figure out index number in Player Scores Array by subtracting one from the index number of Ouya Player enum
+		PlayersAlive[i] = false; //player with index number i is dead.
+		/*
+		for ( i = 0; i < numberOfPlayers; i++) //
+		{
+			Debug.Log ( "Player " + i + " is alive?" + PlayersAlive[i] + ".");
+		}
+		*/
+	}
+	public void playersLeftCheck()
+	{
+		int numberPlayersAlive = 0;
+		for ( int i = 0; i < numberOfPlayers; i++) //increment numberPlayersAlive for every player that's alive
+		{
+
+			if (PlayersAlive[i] == true)
+			{
+				numberPlayersAlive++;
+			}
+		}
+		if (numberPlayersAlive <= 1) //start class selection countdown if 
+		{
+			classSelectCountDown();
+		}
+	}
+
+	void classSelectCountDown()
+	{
+	}
 
 
 	public void addToPlayerScore(OuyaPlayer playerNumber, int additionalScore) //add the player score when given player number and how much to add
 	{
-		if ( playerNumber == OuyaPlayer.P01 ) //this is how you compare enum values.
-		{
-			PlayerScores[0] = PlayerScores[0] + additionalScore;
-			SetScoreText();
-		}
-		if ( playerNumber == OuyaPlayer.P02 )
-		{
-			PlayerScores[1] = PlayerScores[1] + additionalScore;
-			SetScoreText();
-		}
-		if ( playerNumber == OuyaPlayer.P03 )
-		{
-			PlayerScores[2] = PlayerScores[2] + additionalScore;
-			SetScoreText();
-		}
-		if ( playerNumber == OuyaPlayer.P04 )
-		{
-			PlayerScores[3] = PlayerScores[3] + additionalScore;
-			SetScoreText();
-		}
-
+		//Debug.Log ("this is the index value of enum passed into add player score" + (int)playerNumber);
+		int i = (int)playerNumber - 1; //figure out index number in Player Scores Array by subtracting one from the index number of Ouya Player enum
+		PlayerScores[i] = PlayerScores[i] + additionalScore; //add additional score to existing score
+		SetScoreText();
 	}
 
 	void SetScoreText()

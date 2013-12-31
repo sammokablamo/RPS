@@ -26,6 +26,9 @@ public class PlayerController : MonoBehaviour
 	private MeshFilter meshFilter;
 	private MeshFilter otherMeshFilter;
 
+	//reference for other colliding player's player number enum
+	private InputHandler otherInputHandler;
+
 	void Awake() //Awake is called when the script instance is being loaded.
 	{
 		//setup references
@@ -136,12 +139,8 @@ public class PlayerController : MonoBehaviour
 		{
 		
 			otherMeshFilter = other.gameObject.GetComponent<MeshFilter>(); //set reference to Mesh Filter component of other game object.
-			//Debug.Log ("What's in RockMeshTostring? " + rockMesh.ToString(), gameObject);
-			//Debug.Log ("Hit a " + otherMeshFilter.mesh.ToString(), gameObject);
-			//Debug.Log ("I am a " + meshFilter.mesh.ToString() + "EndOfString", gameObject); 
+			otherInputHandler = other.gameObject.GetComponent<InputHandler>();
 	
-			bool same = meshFilter.mesh.ToString() == otherMeshFilter.mesh.ToString();
-
 			if (meshFilter.mesh.ToString() == otherMeshFilter.mesh.ToString()) //Debug.Log ("Are we the same? " + same, gameObject);
 			{
 				//Debug.Log ("We're the same, do nothing.", gameObject);
@@ -149,24 +148,29 @@ public class PlayerController : MonoBehaviour
 			if (meshFilter.mesh.ToString() == "Rock Instance (UnityEngine.Mesh)" && otherMeshFilter.mesh.ToString() == "Scissors Instance (UnityEngine.Mesh)") //Am I a rock and the other thing is scissor.this may not be the best way but it works...
 			{
 				other.gameObject.SetActive(false); //turn off other object
-				gameManager.addToPlayerScore(inputHandler.player, 1);
+				gameManager.addToPlayerScore(inputHandler.player, 1); //add to player score
+				gameManager.setWhoDied(otherInputHandler.player); //pass who died player number enum to game manager
 				//Debug.Log(inputHandler.player);
 				//Debug.Log ("Killed a scissor", gameObject);
 			}
 			if (meshFilter.mesh.ToString() == "Scissors Instance (UnityEngine.Mesh)" && otherMeshFilter.mesh.ToString() == "Paper Instance (UnityEngine.Mesh)" ) //Am I scissors and is the other thing a paper instance?
 			{
-				other.gameObject.SetActive(false);//turn off other object
-				gameManager.addToPlayerScore(inputHandler.player, 1);
+				other.gameObject.SetActive(false); //turn off other object
+				gameManager.addToPlayerScore(inputHandler.player, 1); //add to player score
+				gameManager.setWhoDied(otherInputHandler.player); //pass who died player number enum to game manager
 				//Debug.Log ("Killed a paper", gameObject);
 			}
 			if (meshFilter.mesh.ToString() == "Paper Instance (UnityEngine.Mesh)" && otherMeshFilter.mesh.ToString() == "Rock Instance (UnityEngine.Mesh)" ) //Am I Paper and is the other thing Rock?
 			{
-				other.gameObject.SetActive(false);//turn off other object
-				gameManager.addToPlayerScore(inputHandler.player, 1);//Debug.Log ("Killed a rock", gameObject);
+				other.gameObject.SetActive(false); //turn off other object
+				gameManager.addToPlayerScore(inputHandler.player, 1); //add to player score
+				gameManager.setWhoDied(otherInputHandler.player); //pass who died player number enum to game manager
+				//Debug.Log ("Killed a rock", gameObject);
 			}
-
 		}
 	}
+
+
 
 	void SetCountText()
 	{
