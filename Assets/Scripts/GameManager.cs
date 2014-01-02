@@ -6,7 +6,7 @@ public class GameManager : MonoBehaviour {
 	//is it time for selecting a player class?
 	public bool ClassSelectState;
 
-
+	public int WinningScore;
 
 	private int numberOfPlayers = 4; //replace 4 with a variable pulled from elsewhere later
 
@@ -31,16 +31,15 @@ public class GameManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		WinningScore = 10;
+
 		PlayerScores = new int[numberOfPlayers]; //create array of player scores
 		SetScoreText();
 
 		PlayersAlive = new bool[numberOfPlayers]; //create array of whether players are alive
 
 		PlayerClasses = new Mesh[numberOfPlayers];//create array of player meshes as classes, setup references to meshes.
-		PlayerClasses[0] = Player_1.GetComponent<MeshFilter> ().mesh;
-		PlayerClasses[1] = Player_2.GetComponent<MeshFilter> ().mesh;
-		PlayerClasses[2] = Player_3.GetComponent<MeshFilter> ().mesh;
-		PlayerClasses[3] = Player_4.GetComponent<MeshFilter> ().mesh;
+		UpdatePlayerClassArray();
 
 		SetAllPlayersAlive(); //set all players to be alive.
 
@@ -71,7 +70,15 @@ public class GameManager : MonoBehaviour {
 	}
 	public void countDownConditionCheck()
 	{
-		Debug.Log ("Countdown Condition Check.");
+		//Debug.Log ("Countdown Condition Check.");
+
+		if(checkWinningScoreReached())
+		{
+			Debug.Log ("win condition reached.");
+			return;
+		}
+		Debug.Log("win condition not reached, continuing with countdown condition check");
+
 		int numberPlayersAlive = 0;
 		for ( int i = 0; i < numberOfPlayers; i++) //increment numberPlayersAlive for every player that's alive
 		{
@@ -91,19 +98,24 @@ public class GameManager : MonoBehaviour {
 		//Debug.Log ("Number of players alive: " + numberPlayersAlive);
 
 		//check if players are the same class
+
+		UpdatePlayerClassArray(); //update player class array so so the following has latest info.
+
 		for (int i = 0; i < numberOfPlayers; i++)
 		{
+			//Debug.Log ("i: " + i);
 			for (int j = i; j < numberOfPlayers; j++) //check for same player classes
 			{
 				bool twoPlayersSame = PlayerClasses[i].ToString().Equals(PlayerClasses[j].ToString());
 				//Debug.Log("Player " + i + " and Player " + j + " are the same.");
-
+				//Debug.Log (" i: " + i + " j: " + j);
 				if (twoPlayersSame == true 
 				    && i != j 
 				    && numberPlayersAlive == 2 
 				    && PlayersAlive[i] == true 
 				    && PlayersAlive[j] == true)//found a matching pair, not matched to itself, both alive and two players left
 				{
+
 					StartCoroutine(classSelectCountDown());//start count down
 				}
 
@@ -113,8 +125,10 @@ public class GameManager : MonoBehaviour {
 				    && PlayersAlive[i] == true 
 				    && PlayersAlive[j] == true) //what happens if they match but there's more than two alive.
 				{
+
 					for (int k = j; k < numberOfPlayers; k++) 
 					{
+						//Debug.Log (" j: " + j + " k: " + k);
 						bool thirdPlayerSame = PlayerClasses[j].ToString().Equals(PlayerClasses[k].ToString()); //check for more matching if more than 2 alive.
 
 						if (thirdPlayerSame == true 
@@ -139,6 +153,8 @@ public class GameManager : MonoBehaviour {
 							{
 								bool fourthPlayerSame = PlayerClasses[l].ToString().Equals(PlayerClasses[k].ToString());
 
+								//Debug.Log("number of players: " + numberOfPlayers);
+
 								if (fourthPlayerSame == true
 								    && k != l
 								    && numberPlayersAlive == 4
@@ -147,6 +163,8 @@ public class GameManager : MonoBehaviour {
 								    && PlayersAlive[k] == true 
 								    && PlayersAlive[l] == true) //all four are the same class, start another countdown!
 								{
+									//Debug.Log("i:" + i + "j:" + j + "k:" + k + " l: " + l);
+									//Debug.Log("4 of same");
 									StartCoroutine(sameFourClassesAnnouncment());//start count down
 								}
 
@@ -171,7 +189,7 @@ public class GameManager : MonoBehaviour {
 
 	IEnumerator classSelectCountDown()
 	{
-		Debug.Log ("Countdown script starting.");
+		//Debug.Log ("Countdown script starting.");
 		yield return new WaitForSeconds(1.0f);
 
 		ClassSelectState = true; //turn on class selection
@@ -207,7 +225,7 @@ public class GameManager : MonoBehaviour {
 		}
 		yield return new WaitForSeconds(1.0f);
 		CenterAnnouncementText.text = "";
-
+		yield return new WaitForSeconds(1.0f);
 		StartCoroutine(classSelectCountDown()); //start count down after telling what happened.
 	}
 
@@ -217,6 +235,14 @@ public class GameManager : MonoBehaviour {
 		PlayerScoreText_2.text = "Player 2 Score:" + PlayerScores[1].ToString();
 		PlayerScoreText_3.text = "Player 3 Score:" + PlayerScores[2].ToString();
 		PlayerScoreText_4.text = "Player 4 Score:" + PlayerScores[3].ToString();
+	}
+
+	void UpdatePlayerClassArray()
+	{
+		PlayerClasses[0] = Player_1.GetComponent<MeshFilter> ().mesh;
+		PlayerClasses[1] = Player_2.GetComponent<MeshFilter> ().mesh;
+		PlayerClasses[2] = Player_3.GetComponent<MeshFilter> ().mesh;
+		PlayerClasses[3] = Player_4.GetComponent<MeshFilter> ().mesh;
 	}
 
 	void SetAllPlayersAlive()
@@ -229,7 +255,40 @@ public class GameManager : MonoBehaviour {
 			Player_3.SetActive(true);
 			Player_4.SetActive(true);
 		}
-		
+	}
+
+	void SetAllPlayersDead()
+	{
+		for ( int i = 0; i < numberOfPlayers; i++) //set all players to be alive initially.
+		{
+			PlayersAlive[i] = false;//Debug.Log ( "Player " + i + " is alive?" + PlayersAlive[i] + ".");
+			Player_1.SetActive(false);
+			Player_2.SetActive(false);
+			Player_3.SetActive(false);
+			Player_4.SetActive(false);
+		}
+	}
+
+	bool checkWinningScoreReached()
+	{
+		for ( int i = 0; i < numberOfPlayers; i++)
+		{
+			if (PlayerScores[i] >= WinningScore)
+			{
+				SetAllPlayersDead(); //disable all players
+				StartCoroutine(setWinnerText(i)); //announce winner
+				return true;
+			}
+		}
+
+		return false; //nobody won yet carry on.
+	}
+
+	IEnumerator setWinnerText(int i)
+	{
+		CenterAnnouncementText.text = "Player " + (i + 1) + " wins!"; //set win text
+		yield return new WaitForSeconds(4.0f);
+		CenterAnnouncementText.text = "";
 	}
 
 }

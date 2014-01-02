@@ -1911,7 +1911,7 @@ MeshFilter:
     type: 2}
   m_PrefabInternal: {fileID: 2134336411}
   m_GameObject: {fileID: 963254175}
-  m_Mesh: {fileID: 4300000, guid: a22c75ce38fb9e44fa41ffa9c0701189, type: 3}
+  m_Mesh: {fileID: 4300000, guid: c60a640a95ce8004f8287ed22af32b9d, type: 3}
 --- !u!4 &963254181
 Transform:
   m_ObjectHideFlags: 0
@@ -2739,6 +2739,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ClassSelectState: 1
+  WinningScore: 10
   CenterAnnouncementText: {fileID: 2004286674}
   PlayerScoreText_1: {fileID: 571675121}
   PlayerScoreText_2: {fileID: 867371909}
@@ -4249,7 +4250,7 @@ Prefab:
     - target: {fileID: 3300000, guid: e5eacba72e28ec84baa13b9d9fd81baa, type: 2}
       propertyPath: m_Mesh
       value: 
-      objectReference: {fileID: 4300000, guid: a22c75ce38fb9e44fa41ffa9c0701189, type: 3}
+      objectReference: {fileID: 4300000, guid: c60a640a95ce8004f8287ed22af32b9d, type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e5eacba72e28ec84baa13b9d9fd81baa, type: 2}
   m_RootGameObject: {fileID: 963254175}
