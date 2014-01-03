@@ -7,19 +7,29 @@ ModelImporter:
     100002: Paper
     100004: Rock
     100006: Scissors
+    100008: polySurface3
+    100010: Pill
     400000: //RootNode
     400002: Paper
     400004: Rock
     400006: Scissors
+    400008: polySurface3
+    400010: Pill
     2300000: Paper
     2300002: Rock
     2300004: Scissors
+    2300006: polySurface3
+    2300008: Pill
     3300000: Paper
     3300002: Rock
     3300004: Scissors
+    3300006: polySurface3
+    3300008: Pill
     4300000: Rock
     4300002: Scissors
     4300004: Paper
+    4300006: polySurface3
+    4300008: Pill
     9500000: //RootNode
   materials:
     importMaterials: 1

@@ -30,6 +30,13 @@ public class PlayerController : MonoBehaviour
 	private InputHandler otherInputHandler;
 	private bool classSelectState;
 
+	//setup audio references
+	public AudioClip RockKillClip;      // Audio clip of the rock kill
+	public AudioClip PaperKillClip;      // Audio clip of the rock kill
+	public AudioClip ScissorsKillClip;      // Audio clip of the rock kill
+	public AudioClip PickupPillClip;
+	enum PlayerAudioFX {RockKillAudio, PaperKillAudio, ScissorKillAudio, PickupPillAudio};
+
 	void Awake() //Awake is called when the script instance is being loaded.
 	{
 		//setup references
@@ -130,11 +137,11 @@ public class PlayerController : MonoBehaviour
 			{
 				//set active to false, turning it off.
 				other.gameObject.SetActive(false);
+				AudioManagement(PlayerAudioFX.PickupPillAudio);
 				//increment count by one.
 				//count = count + 1;
 				//SetCountText();
 				//set active to false, turning it off.
-				other.gameObject.SetActive(false);
 				//increment count by one.
 				//count = count + 1;
 				//SetCountText();
@@ -155,28 +162,55 @@ public class PlayerController : MonoBehaviour
 				{
 					other.gameObject.SetActive(false); //turn off other object
 					gameManager.addToPlayerScore(inputHandler.player, 1, otherInputHandler.player); //add to player score and tell manager who died.
-
+					AudioManagement(PlayerAudioFX.RockKillAudio);
 					//Debug.Log(inputHandler.player);
 					Debug.Log ("Killed a scissor", gameObject);
+				}
+
+				if (meshFilter.mesh.ToString() == "Paper Instance (UnityEngine.Mesh)" && otherMeshFilter.mesh.ToString() == "Rock Instance (UnityEngine.Mesh)" ) //Am I Paper and is the other thing Rock?
+				{
+					other.gameObject.SetActive(false); //turn off other object
+					gameManager.addToPlayerScore(inputHandler.player, 1, otherInputHandler.player); //add to player score and tell manager who died.
+					AudioManagement(PlayerAudioFX.PaperKillAudio);
+					Debug.Log ("Killed a rock", gameObject);
 				}
 				if (meshFilter.mesh.ToString() == "Scissors Instance (UnityEngine.Mesh)" && otherMeshFilter.mesh.ToString() == "Paper Instance (UnityEngine.Mesh)" ) //Am I scissors and is the other thing a paper instance?
 				{
 					other.gameObject.SetActive(false); //turn off other object
 					gameManager.addToPlayerScore(inputHandler.player, 1, otherInputHandler.player); //add to player score and tell manager who died.
-
+					AudioManagement(PlayerAudioFX.ScissorKillAudio);
 					Debug.Log ("Killed a paper", gameObject);
-				}
-				if (meshFilter.mesh.ToString() == "Paper Instance (UnityEngine.Mesh)" && otherMeshFilter.mesh.ToString() == "Rock Instance (UnityEngine.Mesh)" ) //Am I Paper and is the other thing Rock?
-				{
-					other.gameObject.SetActive(false); //turn off other object
-					gameManager.addToPlayerScore(inputHandler.player, 1, otherInputHandler.player); //add to player score and tell manager who died.
-
-					Debug.Log ("Killed a rock", gameObject);
 				}
 			}
 		}
 	}
 
+	void AudioManagement (PlayerAudioFX AudioToPlay)
+	{
+
+		// If the shout input has been pressed...
+		if(AudioToPlay == PlayerAudioFX.RockKillAudio)
+		{
+			// ... play the shouting clip where we are.
+			AudioSource.PlayClipAtPoint(RockKillClip, transform.position);
+			Debug.Log("play rock audio");
+		}
+		else if (AudioToPlay == PlayerAudioFX.PaperKillAudio)
+		{
+			AudioSource.PlayClipAtPoint(PaperKillClip, transform.position);
+			Debug.Log("play paper audio");
+		}
+		else if (AudioToPlay == PlayerAudioFX.ScissorKillAudio)
+		{
+			AudioSource.PlayClipAtPoint(ScissorsKillClip, transform.position);
+			Debug.Log("play scissor audio");
+		}
+		else if (AudioToPlay == PlayerAudioFX.PickupPillAudio)
+		{
+			AudioSource.PlayClipAtPoint(PickupPillClip, transform.position);
+			Debug.Log("play pill audio");
+		}
+	}
 
 
 	void SetCountText()

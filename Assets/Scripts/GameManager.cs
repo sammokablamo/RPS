@@ -41,6 +41,7 @@ public class GameManager : MonoBehaviour {
 	GameObject[] DeadPlayerGameObjects;
 	Vector3 LivePlayerAverageLocation;
 
+	public int[] PlayerPillCounts; //pill counting array
 
 
 
