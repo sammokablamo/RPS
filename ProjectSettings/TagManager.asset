@@ -5,7 +5,7 @@ TagManager:
   tags:
   - GameManager
   - Enemy
-  - MainLight
+  - SpawnPoint
   - Fader
   - WayPoint
   - Siren

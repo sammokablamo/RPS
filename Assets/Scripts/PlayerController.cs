@@ -121,6 +121,7 @@ public class PlayerController : MonoBehaviour
 
 	void OnTriggerEnter(Collider other) 
 	{
+		Debug.Log ("How many times have i triggered this");
 		//only do trigger stuff if classSelectState is false
 		if (gameManager.ClassSelectState == false)
 		{
@@ -156,21 +157,21 @@ public class PlayerController : MonoBehaviour
 					gameManager.addToPlayerScore(inputHandler.player, 1); //add to player score
 					gameManager.setWhoDied(otherInputHandler.player); //pass who died player number enum to game manager
 					//Debug.Log(inputHandler.player);
-					//Debug.Log ("Killed a scissor", gameObject);
+					Debug.Log ("Killed a scissor", gameObject);
 				}
 				if (meshFilter.mesh.ToString() == "Scissors Instance (UnityEngine.Mesh)" && otherMeshFilter.mesh.ToString() == "Paper Instance (UnityEngine.Mesh)" ) //Am I scissors and is the other thing a paper instance?
 				{
 					other.gameObject.SetActive(false); //turn off other object
 					gameManager.addToPlayerScore(inputHandler.player, 1); //add to player score
 					gameManager.setWhoDied(otherInputHandler.player); //pass who died player number enum to game manager
-					//Debug.Log ("Killed a paper", gameObject);
+					Debug.Log ("Killed a paper", gameObject);
 				}
 				if (meshFilter.mesh.ToString() == "Paper Instance (UnityEngine.Mesh)" && otherMeshFilter.mesh.ToString() == "Rock Instance (UnityEngine.Mesh)" ) //Am I Paper and is the other thing Rock?
 				{
 					other.gameObject.SetActive(false); //turn off other object
 					gameManager.addToPlayerScore(inputHandler.player, 1); //add to player score
 					gameManager.setWhoDied(otherInputHandler.player); //pass who died player number enum to game manager
-					//Debug.Log ("Killed a rock", gameObject);
+					Debug.Log ("Killed a rock", gameObject);
 				}
 				
 			}

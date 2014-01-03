@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System; //adding this for sorting
 
 public class GameManager : MonoBehaviour {
 
@@ -27,6 +28,13 @@ public class GameManager : MonoBehaviour {
 
 	public Mesh[] PlayerClasses;
 
+	public GameObject[] PlayerGameObjectsArray;
+
+	public GameObject[] SpawnPointsArray; //create an array for spawn points
+
+	int numberPlayersAlive; //number of players alive
+
+
 
 
 	// Use this for initialization
@@ -46,6 +54,18 @@ public class GameManager : MonoBehaviour {
 		CenterAnnouncementText.text = ""; //clear announcement text
 		StartCoroutine(classSelectCountDown ());// start class select countdown, Coroutines are are for modelling behaviour over several frames
 
+		//add all spawnpoints to spawn points array
+
+
+		SpawnPointsArray = GameObject.FindGameObjectsWithTag("SpawnPoint"); //setup spawn points references
+		/*
+		for (int i = 0; i < SpawnPointsArray.Length; i++)
+		{
+			Debug.Log("Spawn Point Array [" + i + "] is " + SpawnPointsArray[i]);
+		}
+		*/
+		PlayerGameObjectsArray = GameObject.FindGameObjectsWithTag("Player"); 
+		     
 
 	}
 	
@@ -79,18 +99,11 @@ public class GameManager : MonoBehaviour {
 		}
 		Debug.Log("win condition not reached, continuing with countdown condition check");
 
-		int numberPlayersAlive = 0;
-		for ( int i = 0; i < numberOfPlayers; i++) //increment numberPlayersAlive for every player that's alive
-		{
-
-			if (PlayersAlive[i] == true)
-			{
-				numberPlayersAlive++;
-			}
-		}
+		checkNumberOfPlayersAlive();
 
 		if (numberPlayersAlive <= 1) //start class selection countdown if there's only one left.
 		{
+			relocateDeadPlayers(); //relocate dead players to spawn points
 			StartCoroutine(classSelectCountDown());
 			Debug.Log ("Trying to start countdown.");
 		}
@@ -115,7 +128,7 @@ public class GameManager : MonoBehaviour {
 				    && PlayersAlive[i] == true 
 				    && PlayersAlive[j] == true)//found a matching pair, not matched to itself, both alive and two players left
 				{
-
+					relocateDeadPlayers(); //relocate dead players to spawn points
 					StartCoroutine(classSelectCountDown());//start count down
 				}
 
@@ -139,6 +152,7 @@ public class GameManager : MonoBehaviour {
 						    && PlayersAlive[k] == true //if there's three alive and they're all the same
 						    )
 						{
+							relocateDeadPlayers(); //relocate dead players to spawn points
 							StartCoroutine(classSelectCountDown());//start count down
 						}
 
@@ -165,6 +179,7 @@ public class GameManager : MonoBehaviour {
 								{
 									//Debug.Log("i:" + i + "j:" + j + "k:" + k + " l: " + l);
 									//Debug.Log("4 of same");
+									//don't relocate dead players to spawn points because there are none.
 									StartCoroutine(sameFourClassesAnnouncment());//start count down
 								}
 
@@ -179,9 +194,21 @@ public class GameManager : MonoBehaviour {
 		
 
 	}
+
+	void checkNumberOfPlayersAlive ()
+	{
+		numberPlayersAlive = 0;
+		for (int i = 0; i < numberOfPlayers; i++)//increment numberPlayersAlive for every player that's alive
+		{
+			if (PlayersAlive [i] == true) {
+				numberPlayersAlive++;
+			}
+		}
+	}
+
 	public void addToPlayerScore(OuyaPlayer playerNumber, int additionalScore) //add the player score when given player number and how much to add
 	{
-		//Debug.Log ("this is the index value of enum passed into add player score" + (int)playerNumber);
+		Debug.Log ("this is the index value of enum passed into add player score" + (int)playerNumber);
 		int i = (int)playerNumber - 1; //figure out index number in Player Scores Array by subtracting one from the index number of Ouya Player enum
 		PlayerScores[i] = PlayerScores[i] + additionalScore; //add additional score to existing score
 		SetScoreText();
@@ -189,6 +216,7 @@ public class GameManager : MonoBehaviour {
 
 	IEnumerator classSelectCountDown()
 	{
+
 		//Debug.Log ("Countdown script starting.");
 		yield return new WaitForSeconds(1.0f);
 
@@ -207,6 +235,121 @@ public class GameManager : MonoBehaviour {
 		ClassSelectState = false; //turn off class selection
 		yield return new WaitForSeconds(1.0f);
 		countDownConditionCheck(); //check if conditions are met for another countdown, this happens only when someone dies, and after a coundown finishes.
+	}
+
+	void relocateDeadPlayers ()
+	{
+		//get distances between live players and spawn points
+		//spawn dead players at greatest distances randomly 
+		float[] SpawnPointDistances;
+		SpawnPointDistances = new float[SpawnPointsArray.Length]; //size of spawn point distances array equal to number of spawnpoints
+
+		float[] SortedSpawnPointDistances;
+		SortedSpawnPointDistances = new float[0];
+
+		GameObject[] LivePlayerGameObjects;
+		LivePlayerGameObjects = new GameObject[0];
+
+		GameObject[] DeadPlayerGameObjects;
+		DeadPlayerGameObjects = new GameObject[0];
+
+		Vector3 LivePlayerAverageLocation;
+		LivePlayerAverageLocation = Vector3.zero; //temp value in LivePlayer Average location
+
+		for (int i = 0; i < PlayerGameObjectsArray.Length; i++) //separate live and dead players into two different arrays.
+		{
+			if(PlayerGameObjectsArray[i].activeSelf == true)
+			{
+				Array.Resize(ref LivePlayerGameObjects, LivePlayerGameObjects.Length + 1); // resize array of live players by one.
+				LivePlayerGameObjects[LivePlayerGameObjects.Length - 1] = PlayerGameObjectsArray[i]; // if player is alive add to live players array
+				Debug.Log ("number of LivePlayerGameObjects: " + i);
+			}
+
+
+
+			if(PlayerGameObjectsArray[i].activeSelf == false)
+			{
+				Array.Resize(ref DeadPlayerGameObjects, DeadPlayerGameObjects.Length + 1); //resize array by one.
+				Debug.Log("DeadPlayerGameObjects.Length = " + DeadPlayerGameObjects.Length);
+				Debug.Log("PlayerGameObjectsArray[i] = " + PlayerGameObjectsArray[i]);
+				Debug.Log("i = " + i);
+				DeadPlayerGameObjects[DeadPlayerGameObjects.Length - 1] = PlayerGameObjectsArray[i]; // if player is dead add to dead players array
+			}
+		}
+
+		//get an average of locations of live players
+		for (int i = 0; i < LivePlayerGameObjects.Length; i++)
+		{
+			Debug.Log ("LivePlayerAverageLocation: " + LivePlayerAverageLocation);
+			LivePlayerAverageLocation += LivePlayerGameObjects[i].transform.position; //add them up
+			Debug.Log ("LivePlayerAverageLocation Sum: " + LivePlayerAverageLocation);
+		}
+		//then divide
+		LivePlayerAverageLocation = new Vector3( LivePlayerAverageLocation.x / LivePlayerGameObjects.Length, LivePlayerAverageLocation.y / LivePlayerGameObjects.Length, LivePlayerAverageLocation.z / LivePlayerGameObjects.Length); 
+		Debug.Log ("LivePlayerAverageLocation after division: " + LivePlayerAverageLocation);
+		for(int i = 0; i < SpawnPointsArray.Length; i++)
+		{
+			SpawnPointDistances[i] = Vector3.Distance(LivePlayerAverageLocation, SpawnPointsArray[i].transform.position); //get distance between live player average and spawn point i
+			Debug.Log ("Spawn Point " + i + " is " + SpawnPointDistances[i] + " from average liveplayer location " + i);
+		}
+		for(int i = 0; i < SpawnPointDistances.Length; i++) //trying to transfer values from unsorted to sorted but keep them unlinked.
+		{
+			Array.Resize(ref SortedSpawnPointDistances, SortedSpawnPointDistances.Length + 1);
+			SortedSpawnPointDistances[i] = SpawnPointDistances[i];
+			Debug.Log ("Sorted Spawn Point " + i + " is " + SortedSpawnPointDistances[i] + " from average liveplayer location ");
+		}
+		 //transfer unsorted distances to sorted.
+		Array.Sort (SortedSpawnPointDistances);//sort array from lowest value to highest.
+		Array.Reverse (SortedSpawnPointDistances);//reverse order so highest is first.
+
+
+		for(int i = 0; i < SortedSpawnPointDistances.Length; i++) //for debug read out contents of sorted spawn point distances
+		{
+
+			Debug.Log ("Sorted Spawn Point " + i + " is " + SortedSpawnPointDistances[i] + " from average liveplayer location ");
+		}
+
+		for(int i = 0; i < SpawnPointDistances.Length; i++) //for debug read out contents of sorted spawn point distances
+		{
+			
+			Debug.Log ("Checking that unsorted Spawn Point " + i + " is " + SpawnPointDistances[i] + " from average liveplayer location ");
+		}
+
+		//unshuffled player game object array debug
+		for(int i = 0; i < DeadPlayerGameObjects.Length; i++) //for debug read out contents of sorted spawn point distances
+		{
+			
+			Debug.Log ("Unshuffled dead player list: " + i + " is " + DeadPlayerGameObjects[i]);
+		}
+
+		//shuffle dead player array so when they're matched up with spawn points no one gets consistent advantage.
+		for (int t = 0; t < DeadPlayerGameObjects.Length; t++ ) // Knuth shuffle algorithm :: courtesy of Wikipedia :)
+			
+		{
+			
+			GameObject tmp = DeadPlayerGameObjects[t]; //assign t to temp
+			int r = UnityEngine.Random.Range(t, DeadPlayerGameObjects.Length);// randomly choose another index in range of 
+			DeadPlayerGameObjects[t] = DeadPlayerGameObjects[r];// move original to new random location
+			DeadPlayerGameObjects[r] = tmp; //move random to temp
+		}
+		//post shuffle list debug
+		for(int i = 0; i < DeadPlayerGameObjects.Length; i++) //for debug read out contents of sorted spawn point distances
+		{
+			
+			Debug.Log ("Shuffled dead player list: " + i + " is " + DeadPlayerGameObjects[i]);
+		}
+		//Debug.Log("Randomized DeadPlayer list: " + DeadPlayerObjects[i]);
+		//debug for loop
+		for (int i = 0; i < DeadPlayerGameObjects.Length; i++)
+		{
+			//find index of spawn point in unordered array that matches distance in ordered array, farthest distance first.
+			int spawnPointIndex = Array.IndexOf(SpawnPointDistances, SortedSpawnPointDistances[i]);
+			Debug.Log ("spawnPointIndex " + i + " is " + spawnPointIndex);
+			Debug.Log ( "SortedSpawnPointDistances[i]" + SortedSpawnPointDistances[i]);
+			Debug.Log ( "SpawnPointDistances[spawnPointIndex]" + SpawnPointDistances[spawnPointIndex]);
+			//set dead player position
+			DeadPlayerGameObjects[i].transform.position = SpawnPointsArray[spawnPointIndex].transform.position;
+  		}
 	}
 
 	IEnumerator sameFourClassesAnnouncment()
