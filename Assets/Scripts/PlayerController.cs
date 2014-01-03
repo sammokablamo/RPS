@@ -154,23 +154,23 @@ public class PlayerController : MonoBehaviour
 				if (meshFilter.mesh.ToString() == "Rock Instance (UnityEngine.Mesh)" && otherMeshFilter.mesh.ToString() == "Scissors Instance (UnityEngine.Mesh)") //Am I a rock and the other thing is scissor.this may not be the best way but it works...
 				{
 					other.gameObject.SetActive(false); //turn off other object
-					gameManager.addToPlayerScore(inputHandler.player, 1); //add to player score
-					gameManager.setWhoDied(otherInputHandler.player); //pass who died player number enum to game manager
+					gameManager.addToPlayerScore(inputHandler.player, 1, otherInputHandler.player); //add to player score and tell manager who died.
+
 					//Debug.Log(inputHandler.player);
 					Debug.Log ("Killed a scissor", gameObject);
 				}
 				if (meshFilter.mesh.ToString() == "Scissors Instance (UnityEngine.Mesh)" && otherMeshFilter.mesh.ToString() == "Paper Instance (UnityEngine.Mesh)" ) //Am I scissors and is the other thing a paper instance?
 				{
 					other.gameObject.SetActive(false); //turn off other object
-					gameManager.addToPlayerScore(inputHandler.player, 1); //add to player score
-					gameManager.setWhoDied(otherInputHandler.player); //pass who died player number enum to game manager
+					gameManager.addToPlayerScore(inputHandler.player, 1, otherInputHandler.player); //add to player score and tell manager who died.
+
 					Debug.Log ("Killed a paper", gameObject);
 				}
 				if (meshFilter.mesh.ToString() == "Paper Instance (UnityEngine.Mesh)" && otherMeshFilter.mesh.ToString() == "Rock Instance (UnityEngine.Mesh)" ) //Am I Paper and is the other thing Rock?
 				{
 					other.gameObject.SetActive(false); //turn off other object
-					gameManager.addToPlayerScore(inputHandler.player, 1); //add to player score
-					gameManager.setWhoDied(otherInputHandler.player); //pass who died player number enum to game manager
+					gameManager.addToPlayerScore(inputHandler.player, 1, otherInputHandler.player); //add to player score and tell manager who died.
+
 					Debug.Log ("Killed a rock", gameObject);
 				}
 			}

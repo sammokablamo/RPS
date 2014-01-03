@@ -77,18 +77,7 @@ public class GameManager : MonoBehaviour {
 	
 	}
 
-	public void setWhoDied(OuyaPlayer playerNumber)
-	{
-		int i = (int)playerNumber - 1; //figure out index number in Player Scores Array by subtracting one from the index number of Ouya Player enum
-		PlayersAlive[i] = false; //player with index number i is dead.
 
-		for ( i = 0; i < numberOfPlayers; i++) //
-		{
-			//Debug.Log ( "Player " + i + " is alive? " + PlayersAlive[i] + ".");
-		}
-
-		countDownConditionCheck(); //check if conditions are met for another countdown, this happens only when someone dies, and after a coundown finishes.
-	}
 	public void countDownConditionCheck()
 	{
 		//Debug.Log ("Countdown Condition Check.");
@@ -207,12 +196,25 @@ public class GameManager : MonoBehaviour {
 		}
 	}
 
-	public void addToPlayerScore(OuyaPlayer playerNumber, int additionalScore) //add the player score when given player number and how much to add
+	public void addToPlayerScore(OuyaPlayer playerNumber, int additionalScore, OuyaPlayer deadPlayerNumber) //add the player score when given player number and how much to add
 	{
 		//Debug.Log ("this is the index value of enum passed into add player score" + (int)playerNumber);
-		int i = (int)playerNumber - 1; //figure out index number in Player Scores Array by subtracting one from the index number of Ouya Player enum
-		PlayerScores[i] = PlayerScores[i] + additionalScore; //add additional score to existing score
+		int livePlayerIndex = (int)playerNumber - 1; //figure out index number in Player Scores Array by subtracting one from the index number of Ouya Player enum
+		int deadPlayerIndex = (int)deadPlayerNumber - 1; 
+
+		if(PlayersAlive[deadPlayerIndex] == true) //only score if player is still alive at time of scoring. this gates multiple collision triggers from scoring same dude more than once.
+		{
+		setWhoDied(deadPlayerIndex);//change player to dead
+		PlayerScores[livePlayerIndex] = PlayerScores[livePlayerIndex] + additionalScore; //add additional score to existing score
 		SetScoreText();
+		}
+	}
+
+	public void setWhoDied(int deadPlayerIndex)
+	{
+		PlayersAlive[deadPlayerIndex] = false; //player with index number i is dead.
+		
+		countDownConditionCheck(); //check if conditions are met for another countdown, this happens only when someone dies, and after a coundown finishes.
 	}
 
 	IEnumerator classSelectCountDown()
