@@ -34,6 +34,13 @@ public class GameManager : MonoBehaviour {
 
 	int numberPlayersAlive; //number of players alive
 
+	//declare variables for dead player repositioning
+	float[] SpawnPointDistances;
+	float[] SortedSpawnPointDistances;
+	GameObject[] LivePlayerGameObjects;
+	GameObject[] DeadPlayerGameObjects;
+	Vector3 LivePlayerAverageLocation;
+
 
 
 
@@ -56,14 +63,8 @@ public class GameManager : MonoBehaviour {
 
 		//add all spawnpoints to spawn points array
 
-
 		SpawnPointsArray = GameObject.FindGameObjectsWithTag("SpawnPoint"); //setup spawn points references
-		/*
-		for (int i = 0; i < SpawnPointsArray.Length; i++)
-		{
-			Debug.Log("Spawn Point Array [" + i + "] is " + SpawnPointsArray[i]);
-		}
-		*/
+
 		PlayerGameObjectsArray = GameObject.FindGameObjectsWithTag("Player"); 
 		     
 
@@ -97,7 +98,7 @@ public class GameManager : MonoBehaviour {
 			Debug.Log ("win condition reached.");
 			return;
 		}
-		Debug.Log("win condition not reached, continuing with countdown condition check");
+		//Debug.Log("win condition not reached, continuing with countdown condition check");
 
 		checkNumberOfPlayersAlive();
 
@@ -208,7 +209,7 @@ public class GameManager : MonoBehaviour {
 
 	public void addToPlayerScore(OuyaPlayer playerNumber, int additionalScore) //add the player score when given player number and how much to add
 	{
-		Debug.Log ("this is the index value of enum passed into add player score" + (int)playerNumber);
+		//Debug.Log ("this is the index value of enum passed into add player score" + (int)playerNumber);
 		int i = (int)playerNumber - 1; //figure out index number in Player Scores Array by subtracting one from the index number of Ouya Player enum
 		PlayerScores[i] = PlayerScores[i] + additionalScore; //add additional score to existing score
 		SetScoreText();
@@ -237,107 +238,46 @@ public class GameManager : MonoBehaviour {
 		countDownConditionCheck(); //check if conditions are met for another countdown, this happens only when someone dies, and after a coundown finishes.
 	}
 
-	void relocateDeadPlayers ()
+	/*************************************************************************
+	 * awesome function to average location of live players,                 *
+	 * get their distance from spawn points, order spawn points by distance, *
+	 * shuffle dead player list and assign them to farthest spawn points     *
+	 * ***********************************************************************/
+
+	void relocateDeadPlayers () 
 	{
 		//get distances between live players and spawn points
 		//spawn dead players at greatest distances randomly 
-		float[] SpawnPointDistances;
+
+
 		SpawnPointDistances = new float[SpawnPointsArray.Length]; //size of spawn point distances array equal to number of spawnpoints
 
-		float[] SortedSpawnPointDistances;
 		SortedSpawnPointDistances = new float[0];
 
-		GameObject[] LivePlayerGameObjects;
 		LivePlayerGameObjects = new GameObject[0];
 
-		GameObject[] DeadPlayerGameObjects;
 		DeadPlayerGameObjects = new GameObject[0];
 
-		Vector3 LivePlayerAverageLocation;
+
 		LivePlayerAverageLocation = Vector3.zero; //temp value in LivePlayer Average location
 
-		for (int i = 0; i < PlayerGameObjectsArray.Length; i++) //separate live and dead players into two different arrays.
-		{
-			if(PlayerGameObjectsArray[i].activeSelf == true)
-			{
-				Array.Resize(ref LivePlayerGameObjects, LivePlayerGameObjects.Length + 1); // resize array of live players by one.
-				LivePlayerGameObjects[LivePlayerGameObjects.Length - 1] = PlayerGameObjectsArray[i]; // if player is alive add to live players array
-				Debug.Log ("number of LivePlayerGameObjects: " + i);
-			}
+		setLiveAndDeadPlayerArrays (); //delegates players to either live players array and dead players array
 
+		findAverageLocationOfLivePlayers ();//get an average of locations of live players
 
-
-			if(PlayerGameObjectsArray[i].activeSelf == false)
-			{
-				Array.Resize(ref DeadPlayerGameObjects, DeadPlayerGameObjects.Length + 1); //resize array by one.
-				Debug.Log("DeadPlayerGameObjects.Length = " + DeadPlayerGameObjects.Length);
-				Debug.Log("PlayerGameObjectsArray[i] = " + PlayerGameObjectsArray[i]);
-				Debug.Log("i = " + i);
-				DeadPlayerGameObjects[DeadPlayerGameObjects.Length - 1] = PlayerGameObjectsArray[i]; // if player is dead add to dead players array
-			}
-		}
-
-		//get an average of locations of live players
-		for (int i = 0; i < LivePlayerGameObjects.Length; i++)
-		{
-			Debug.Log ("LivePlayerAverageLocation: " + LivePlayerAverageLocation);
-			LivePlayerAverageLocation += LivePlayerGameObjects[i].transform.position; //add them up
-			Debug.Log ("LivePlayerAverageLocation Sum: " + LivePlayerAverageLocation);
-		}
-		//then divide
-		LivePlayerAverageLocation = new Vector3( LivePlayerAverageLocation.x / LivePlayerGameObjects.Length, LivePlayerAverageLocation.y / LivePlayerGameObjects.Length, LivePlayerAverageLocation.z / LivePlayerGameObjects.Length); 
-		Debug.Log ("LivePlayerAverageLocation after division: " + LivePlayerAverageLocation);
-		for(int i = 0; i < SpawnPointsArray.Length; i++)
-		{
-			SpawnPointDistances[i] = Vector3.Distance(LivePlayerAverageLocation, SpawnPointsArray[i].transform.position); //get distance between live player average and spawn point i
-			Debug.Log ("Spawn Point " + i + " is " + SpawnPointDistances[i] + " from average liveplayer location " + i);
-		}
-		for(int i = 0; i < SpawnPointDistances.Length; i++) //trying to transfer values from unsorted to sorted but keep them unlinked.
+		setSpawnPointDistancesArray (); //set items in array of distances between each spawn point the average player location
+		for(int i = 0; i < SpawnPointDistances.Length; i++) //transfer values from unsorted to sorted but keep them unlinked.
 		{
 			Array.Resize(ref SortedSpawnPointDistances, SortedSpawnPointDistances.Length + 1);
 			SortedSpawnPointDistances[i] = SpawnPointDistances[i];
-			Debug.Log ("Sorted Spawn Point " + i + " is " + SortedSpawnPointDistances[i] + " from average liveplayer location ");
+			//Debug.Log ("Sorted Spawn Point " + i + " is " + SortedSpawnPointDistances[i] + " from average liveplayer location ");
 		}
 		 //transfer unsorted distances to sorted.
 		Array.Sort (SortedSpawnPointDistances);//sort array from lowest value to highest.
 		Array.Reverse (SortedSpawnPointDistances);//reverse order so highest is first.
 
+		shuffleDeadPlayersArray ();//shuffle dead player array so when they're matched up with spawn points no one gets consistent advantage.
 
-		for(int i = 0; i < SortedSpawnPointDistances.Length; i++) //for debug read out contents of sorted spawn point distances
-		{
-
-			Debug.Log ("Sorted Spawn Point " + i + " is " + SortedSpawnPointDistances[i] + " from average liveplayer location ");
-		}
-
-		for(int i = 0; i < SpawnPointDistances.Length; i++) //for debug read out contents of sorted spawn point distances
-		{
-			
-			Debug.Log ("Checking that unsorted Spawn Point " + i + " is " + SpawnPointDistances[i] + " from average liveplayer location ");
-		}
-
-		//unshuffled player game object array debug
-		for(int i = 0; i < DeadPlayerGameObjects.Length; i++) //for debug read out contents of sorted spawn point distances
-		{
-			
-			Debug.Log ("Unshuffled dead player list: " + i + " is " + DeadPlayerGameObjects[i]);
-		}
-
-		//shuffle dead player array so when they're matched up with spawn points no one gets consistent advantage.
-		for (int t = 0; t < DeadPlayerGameObjects.Length; t++ ) // Knuth shuffle algorithm :: courtesy of Wikipedia :)
-			
-		{
-			
-			GameObject tmp = DeadPlayerGameObjects[t]; //assign t to temp
-			int r = UnityEngine.Random.Range(t, DeadPlayerGameObjects.Length);// randomly choose another index in range of 
-			DeadPlayerGameObjects[t] = DeadPlayerGameObjects[r];// move original to new random location
-			DeadPlayerGameObjects[r] = tmp; //move random to temp
-		}
-		//post shuffle list debug
-		for(int i = 0; i < DeadPlayerGameObjects.Length; i++) //for debug read out contents of sorted spawn point distances
-		{
-			
-			Debug.Log ("Shuffled dead player list: " + i + " is " + DeadPlayerGameObjects[i]);
-		}
 		//Debug.Log("Randomized DeadPlayer list: " + DeadPlayerObjects[i]);
 		//debug for loop
 		for (int i = 0; i < DeadPlayerGameObjects.Length; i++)
@@ -434,4 +374,61 @@ public class GameManager : MonoBehaviour {
 		CenterAnnouncementText.text = "";
 	}
 
+	void setLiveAndDeadPlayerArrays ()
+	{
+		for (int i = 0; i < PlayerGameObjectsArray.Length; i++)//separate live and dead players into two different arrays.
+		{
+			if (PlayerGameObjectsArray [i].activeSelf == true) {
+				Array.Resize (ref LivePlayerGameObjects, LivePlayerGameObjects.Length + 1);
+				// resize array of live players by one.
+				LivePlayerGameObjects [LivePlayerGameObjects.Length - 1] = PlayerGameObjectsArray [i];
+				// if player is alive add to live players array
+				Debug.Log ("number of LivePlayerGameObjects: " + i);
+			}
+			if (PlayerGameObjectsArray [i].activeSelf == false) {
+				Array.Resize (ref DeadPlayerGameObjects, DeadPlayerGameObjects.Length + 1);
+				//resize array by one.
+				DeadPlayerGameObjects [DeadPlayerGameObjects.Length - 1] = PlayerGameObjectsArray [i];
+				// if player is dead add to dead players array
+			}
+		}
+	}
+
+	void findAverageLocationOfLivePlayers ()
+	{
+		for (int i = 0; i < LivePlayerGameObjects.Length; i++) {
+			//Debug.Log ("LivePlayerAverageLocation: " + LivePlayerAverageLocation);
+			LivePlayerAverageLocation += LivePlayerGameObjects [i].transform.position;
+			//add them up
+			//Debug.Log ("LivePlayerAverageLocation Sum: " + LivePlayerAverageLocation);
+		}
+		//then divide
+		LivePlayerAverageLocation = new Vector3 (LivePlayerAverageLocation.x / LivePlayerGameObjects.Length, LivePlayerAverageLocation.y / LivePlayerGameObjects.Length, LivePlayerAverageLocation.z / LivePlayerGameObjects.Length);
+		//Debug.Log ("LivePlayerAverageLocation after division: " + LivePlayerAverageLocation);
+	}
+
+	void setSpawnPointDistancesArray ()
+	{
+		for (int i = 0; i < SpawnPointsArray.Length; i++) {
+			SpawnPointDistances [i] = Vector3.Distance (LivePlayerAverageLocation, SpawnPointsArray [i].transform.position);
+			//get distance between live player average and spawn point i
+			//Debug.Log ("Spawn Point " + i + " is " + SpawnPointDistances[i] + " from average liveplayer location " + i);
+		}
+	}
+
+	void shuffleDeadPlayersArray ()
+	{
+		//shuffle dead player array so when they're matched up with spawn points no one gets consistent advantage.
+		for (int t = 0; t < DeadPlayerGameObjects.Length; t++)// Knuth shuffle algorithm :: courtesy of Wikipedia :)
+		{
+			GameObject tmp = DeadPlayerGameObjects [t];
+			//assign t to temp
+			int r = UnityEngine.Random.Range (t, DeadPlayerGameObjects.Length);
+			// randomly choose another index in range of 
+			DeadPlayerGameObjects [t] = DeadPlayerGameObjects [r];
+			// move original to new random location
+			DeadPlayerGameObjects [r] = tmp;
+			//move random to temp
+		}
+	}
 }

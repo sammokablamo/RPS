@@ -173,10 +173,7 @@ public class PlayerController : MonoBehaviour
 					gameManager.setWhoDied(otherInputHandler.player); //pass who died player number enum to game manager
 					Debug.Log ("Killed a rock", gameObject);
 				}
-				
 			}
-
-
 		}
 	}
 
