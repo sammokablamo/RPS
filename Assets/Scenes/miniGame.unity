@@ -135,6 +135,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67ff64b2ebfbfef4e82918393ae83749, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentMoveSpeed: 0
   gameManagerGameObject: {fileID: 1351448789}
   rockMesh: {fileID: 4300000, guid: c60a640a95ce8004f8287ed22af32b9d, type: 3}
   paperMesh: {fileID: 4300000, guid: efa62f3b13771b543aba85723db9d8b6, type: 3}
@@ -1196,6 +1197,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67ff64b2ebfbfef4e82918393ae83749, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentMoveSpeed: 0
   gameManagerGameObject: {fileID: 1351448789}
   rockMesh: {fileID: 4300000, guid: c60a640a95ce8004f8287ed22af32b9d, type: 3}
   paperMesh: {fileID: 4300000, guid: efa62f3b13771b543aba85723db9d8b6, type: 3}
@@ -1374,6 +1376,10 @@ Prefab:
       propertyPath: PickupPillClip
       value: 
       objectReference: {fileID: 8300000, guid: 67d7a210a43ec274da2cae11da45c0b6, type: 3}
+    - target: {fileID: 11400000, guid: e5eacba72e28ec84baa13b9d9fd81baa, type: 2}
+      propertyPath: moveSpeed
+      value: 100
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e5eacba72e28ec84baa13b9d9fd81baa, type: 2}
   m_RootGameObject: {fileID: 473458737}
@@ -1646,8 +1652,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 663192706}
-  m_LocalRotation: {x: .612335384, y: 0, z: 0, w: .790598154}
-  m_LocalPosition: {x: 0, y: 17.4053001, z: -6.14870644}
+  m_LocalRotation: {x: .577280521, y: 0, z: 0, w: .816545963}
+  m_LocalPosition: {x: 0, y: 17.4053001, z: -8.29522514}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -1657,12 +1663,19 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 663192706}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1ca5f80da8c75424d8b520185b0565f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
+  cameraLookatSpeed: .100000001
+  cameraRepositionSpeed: 1
+  gameManager: {fileID: 1351448790}
+  PositionMinLimit: {x: -8, y: 0, z: 0}
+  PositionMaxLimit: {x: 8, y: 0, z: 0}
+  RotationMinLimit: {x: 55, y: -5, z: -2}
+  RotationMaxLimit: {x: 75, y: 5, z: 2}
+  averageLocationOffsetZ: -6
 --- !u!1001 &696030019
 Prefab:
   m_ObjectHideFlags: 0
@@ -1746,6 +1759,10 @@ Prefab:
       propertyPath: PickupPillClip
       value: 
       objectReference: {fileID: 8300000, guid: 67d7a210a43ec274da2cae11da45c0b6, type: 3}
+    - target: {fileID: 11400000, guid: e5eacba72e28ec84baa13b9d9fd81baa, type: 2}
+      propertyPath: moveSpeed
+      value: 100
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e5eacba72e28ec84baa13b9d9fd81baa, type: 2}
   m_RootGameObject: {fileID: 1280907900}
@@ -1989,6 +2006,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67ff64b2ebfbfef4e82918393ae83749, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentMoveSpeed: 0
   gameManagerGameObject: {fileID: 1351448789}
   rockMesh: {fileID: 4300000, guid: c60a640a95ce8004f8287ed22af32b9d, type: 3}
   paperMesh: {fileID: 4300000, guid: efa62f3b13771b543aba85723db9d8b6, type: 3}
@@ -2592,6 +2610,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67ff64b2ebfbfef4e82918393ae83749, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentMoveSpeed: 0
   gameManagerGameObject: {fileID: 1351448789}
   rockMesh: {fileID: 4300000, guid: c60a640a95ce8004f8287ed22af32b9d, type: 3}
   paperMesh: {fileID: 4300000, guid: efa62f3b13771b543aba85723db9d8b6, type: 3}
@@ -2928,7 +2947,13 @@ MonoBehaviour:
   PlayerClasses: []
   PlayerGameObjectsArray: []
   SpawnPointsArray: []
+  LivePlayerGameObjects: []
   PlayerPillCounts: 
+  baseMoveSpeed: 300
+  maxMoveSpeed: 1700
+  moveSpeedDissipationRate: .25
+  speedIncrementPerPill: 100
+  roundTime: 30
 --- !u!4 &1351448791
 Transform:
   m_ObjectHideFlags: 0
@@ -4332,6 +4357,10 @@ Prefab:
       propertyPath: PickupPillClip
       value: 
       objectReference: {fileID: 8300000, guid: 67d7a210a43ec274da2cae11da45c0b6, type: 3}
+    - target: {fileID: 11400000, guid: e5eacba72e28ec84baa13b9d9fd81baa, type: 2}
+      propertyPath: moveSpeed
+      value: 100
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e5eacba72e28ec84baa13b9d9fd81baa, type: 2}
   m_RootGameObject: {fileID: 32669247}
@@ -4514,6 +4543,10 @@ Prefab:
       propertyPath: PickupPillClip
       value: 
       objectReference: {fileID: 8300000, guid: 67d7a210a43ec274da2cae11da45c0b6, type: 3}
+    - target: {fileID: 11400000, guid: e5eacba72e28ec84baa13b9d9fd81baa, type: 2}
+      propertyPath: moveSpeed
+      value: 200
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e5eacba72e28ec84baa13b9d9fd81baa, type: 2}
   m_RootGameObject: {fileID: 963254175}

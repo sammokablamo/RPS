@@ -7,7 +7,11 @@ public class PlayerController : MonoBehaviour
 	//Ouya Controller variables
 	//private const float INNER_DEADZONE = 0.3f;
 	
-	private const float MOVE_SPEED = 50f;
+	private float baseMoveSpeed;
+	private float maxMoveSpeed;
+	private float moveSpeedDissipationRate;
+	public float currentMoveSpeed;
+	private float speedIncrementPerPill;
 
 	//player speed
 	//public float speed; 
@@ -47,7 +51,10 @@ public class PlayerController : MonoBehaviour
 		//mesh filter component reference
 		meshFilter = GetComponent<MeshFilter> ();
 
-
+		baseMoveSpeed = gameManager.baseMoveSpeed;
+		maxMoveSpeed = gameManager.maxMoveSpeed;
+		moveSpeedDissipationRate = gameManager.moveSpeedDissipationRate;
+		speedIncrementPerPill = gameManager.speedIncrementPerPill;
 
 	}
 
@@ -66,47 +73,11 @@ public class PlayerController : MonoBehaviour
 	//Update is called every frame, if the MonoBehaviour is enabled.
 	void Update ()
 	{
-		//Debug.Log ("Update", gameObject);
-		bool rockButton = inputHandler.down_U;
-		bool paperButton = inputHandler.down_Y;
-		bool scissorButton = inputHandler.down_A;
-/*
-		GUI.Label(new Rect(50, 260, 100, 20), "O " + OuyaInput.GetButton(OuyaButton.O, player));
-		GUI.Label(new Rect(50, 280, 100, 20), "U " + OuyaInput.GetButton(OuyaButton.U, player));
-		GUI.Label(new Rect(50, 300, 100, 20), "Y " + OuyaInput.GetButton(OuyaButton.Y, player));
-		GUI.Label(new Rect(50, 320, 100, 20), "A " + OuyaInput.GetButton(OuyaButton.A, player));
-		*/
 
-		// class selection
-		if (gameManager.ClassSelectState == true) 
-		{
-			if (rockButton == true)
-			{
-				//Debug.Log ("Rock", gameObject);
-				meshFilter.mesh = rockMesh;
-				//SetClass(OuyaPlayer, 0); //A yet uncreated function that sets current player to a class number, rock
-			
-			}
-			else if (paperButton == true)
-			{
-				Debug.Log ("Paper", gameObject);
-				meshFilter.mesh = paperMesh;
-				//SetClass(OuyaPlayer, 1);
-			}
-			else if (scissorButton == true)
-			{
-				Debug.Log ("Scissor", gameObject);
-				meshFilter.mesh = scissorMesh;
-				//SetClass(OuyaPlayer, 2);
-			}
-			else
-			{
-				//Debug.Log ("no button conditions are true", gameObject);
-			}
-			
-		} else{
-			//Debug.Log ("Class Select State is false", gameObject);
-		}
+		currentMoveSpeed = Mathf.Lerp (currentMoveSpeed, baseMoveSpeed, moveSpeedDissipationRate* Time.deltaTime);
+		//Debug.Log ( "currentMoveSpeed " + currentMoveSpeed);
+		classSelectionButtonInterations ();
+
 	}
 	//fixed update is called every fixed framerate frame if monobehavior is enabled.
 	void FixedUpdate ()
@@ -118,7 +89,7 @@ public class PlayerController : MonoBehaviour
 
 		Vector3 movement = new Vector3 (moveHorizontal, 0.0f, moveVertical);
 
-		rigidbody.AddForce(movement * MOVE_SPEED * Time.deltaTime);
+		rigidbody.AddForce(movement * currentMoveSpeed * Time.deltaTime);
 
 		//pickup stuff
 		//when player controller collides with an object, create a collider variable and name it "other".
@@ -128,7 +99,7 @@ public class PlayerController : MonoBehaviour
 
 	void OnTriggerEnter(Collider other) 
 	{
-		Debug.Log ("How many times have i triggered this");
+		//Debug.Log ("How many times have i triggered this");
 		//only do trigger stuff if classSelectState is false
 		if (gameManager.ClassSelectState == false)
 		{
@@ -138,14 +109,15 @@ public class PlayerController : MonoBehaviour
 				//set active to false, turning it off.
 				other.gameObject.SetActive(false);
 				AudioManagement(PlayerAudioFX.PickupPillAudio);
-				//increment count by one.
-				//count = count + 1;
-				//SetCountText();
-				//set active to false, turning it off.
-				//increment count by one.
-				//count = count + 1;
-				//SetCountText();
-				//Debug.Log ("PickedStuffUp", gameObject);
+				currentMoveSpeed = currentMoveSpeed + speedIncrementPerPill;
+				//cap move speed
+				if (currentMoveSpeed > maxMoveSpeed)
+				{
+					currentMoveSpeed = maxMoveSpeed;
+				}
+
+				gameManager.startPickupRespawnTimerProxy(other.gameObject);
+				//Debug.Log ("got past pickup respawn method call");
 			}
 			
 			if (other.gameObject.tag == "Player")
@@ -193,22 +165,22 @@ public class PlayerController : MonoBehaviour
 		{
 			// ... play the shouting clip where we are.
 			AudioSource.PlayClipAtPoint(RockKillClip, transform.position);
-			Debug.Log("play rock audio");
+			//Debug.Log("play rock audio");
 		}
 		else if (AudioToPlay == PlayerAudioFX.PaperKillAudio)
 		{
 			AudioSource.PlayClipAtPoint(PaperKillClip, transform.position);
-			Debug.Log("play paper audio");
+			//Debug.Log("play paper audio");
 		}
 		else if (AudioToPlay == PlayerAudioFX.ScissorKillAudio)
 		{
 			AudioSource.PlayClipAtPoint(ScissorsKillClip, transform.position);
-			Debug.Log("play scissor audio");
+			//Debug.Log("play scissor audio");
 		}
 		else if (AudioToPlay == PlayerAudioFX.PickupPillAudio)
 		{
 			AudioSource.PlayClipAtPoint(PickupPillClip, transform.position);
-			Debug.Log("play pill audio");
+			//Debug.Log("play pill audio");
 		}
 	}
 
@@ -221,6 +193,41 @@ public class PlayerController : MonoBehaviour
 		//	winText.text = "YOU WIN!";
 		//}
 	}
+
+	void classSelectionButtonInterations ()
+	{
+		//Debug.Log ("Update", gameObject);
+		bool rockButton = inputHandler.down_U;
+		bool paperButton = inputHandler.down_Y;
+		bool scissorButton = inputHandler.down_A;
+		// class selection
+		if (gameManager.ClassSelectState == true) {
+			if (rockButton == true) {
+				//Debug.Log ("Rock", gameObject);
+				meshFilter.mesh = rockMesh;
+				//SetClass(OuyaPlayer, 0); //A yet uncreated function that sets current player to a class number, rock
+			}
+			else
+				if (paperButton == true) {
+					Debug.Log ("Paper", gameObject);
+					meshFilter.mesh = paperMesh;
+					//SetClass(OuyaPlayer, 1);
+				}
+				else
+					if (scissorButton == true) {
+						Debug.Log ("Scissor", gameObject);
+						meshFilter.mesh = scissorMesh;
+						//SetClass(OuyaPlayer, 2);
+					}
+					else {
+						//Debug.Log ("no button conditions are true", gameObject);
+					}
+		}
+		else {
+			//Debug.Log ("Class Select State is false", gameObject);
+		}
+	}
+
 	public void OuyaMenuButtonUp()
 	{
 	}

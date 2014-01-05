@@ -37,13 +37,20 @@ public class GameManager : MonoBehaviour {
 	//declare variables for dead player repositioning
 	float[] SpawnPointDistances;
 	float[] SortedSpawnPointDistances;
-	GameObject[] LivePlayerGameObjects;
+	public GameObject[] LivePlayerGameObjects;
 	GameObject[] DeadPlayerGameObjects;
 	Vector3 LivePlayerAverageLocation;
 
 	public int[] PlayerPillCounts; //pill counting array
 
+	public float baseMoveSpeed; //players will follow this base move speed
+	public float maxMoveSpeed;//all players will hit this max move speed
+	public float moveSpeedDissipationRate;//all players will hit this max move speed
+	public float speedIncrementPerPill;
 
+	//round timer variables
+	public float roundTime;
+	private bool roundResolved;
 
 	// Use this for initialization
 	void Start () {
@@ -221,6 +228,7 @@ public class GameManager : MonoBehaviour {
 	IEnumerator classSelectCountDown()
 	{
 
+		roundResolved = true; //this tells the round timer not to restart when round timer is done.
 		//Debug.Log ("Countdown script starting.");
 		yield return new WaitForSeconds(1.0f);
 
@@ -239,6 +247,8 @@ public class GameManager : MonoBehaviour {
 		ClassSelectState = false; //turn off class selection
 		yield return new WaitForSeconds(1.0f);
 		countDownConditionCheck(); //check if conditions are met for another countdown, this happens only when someone dies, and after a coundown finishes.
+
+		StartCoroutine(startRoundTimer());//start round timer
 	}
 
 	/*************************************************************************
@@ -265,6 +275,13 @@ public class GameManager : MonoBehaviour {
 		LivePlayerAverageLocation = Vector3.zero; //temp value in LivePlayer Average location
 
 		setLiveAndDeadPlayerArrays (); //delegates players to either live players array and dead players array
+
+		for(int i = 0; i < DeadPlayerGameObjects.Length; i++)//zero out velocities of dead player objects
+		{
+			Debug.Log ("initial velocity " + DeadPlayerGameObjects[i].GetComponent<Rigidbody>().velocity);
+			DeadPlayerGameObjects[i].GetComponent<Rigidbody>().velocity = new Vector3(0,0,0);
+			Debug.Log ("changed velocity " + DeadPlayerGameObjects[i].GetComponent<Rigidbody>().velocity);
+		}
 
 		findAverageLocationOfLivePlayers ();//get an average of locations of live players
 
@@ -377,8 +394,12 @@ public class GameManager : MonoBehaviour {
 		CenterAnnouncementText.text = "";
 	}
 
-	void setLiveAndDeadPlayerArrays ()
+	public void setLiveAndDeadPlayerArrays ()
 	{
+		//empty out array
+		Array.Resize (ref LivePlayerGameObjects, 0);
+		Array.Resize (ref DeadPlayerGameObjects, 0);
+
 		for (int i = 0; i < PlayerGameObjectsArray.Length; i++)//separate live and dead players into two different arrays.
 		{
 			if (PlayerGameObjectsArray [i].activeSelf == true) {
@@ -386,7 +407,7 @@ public class GameManager : MonoBehaviour {
 				// resize array of live players by one.
 				LivePlayerGameObjects [LivePlayerGameObjects.Length - 1] = PlayerGameObjectsArray [i];
 				// if player is alive add to live players array
-				Debug.Log ("number of LivePlayerGameObjects: " + i);
+				//Debug.Log ("number of LivePlayerGameObjects: " + i);
 			}
 			if (PlayerGameObjectsArray [i].activeSelf == false) {
 				Array.Resize (ref DeadPlayerGameObjects, DeadPlayerGameObjects.Length + 1);
@@ -397,7 +418,7 @@ public class GameManager : MonoBehaviour {
 		}
 	}
 
-	void findAverageLocationOfLivePlayers ()
+	public Vector3 findAverageLocationOfLivePlayers () //this is used in both spawn location decision and camera follow script
 	{
 		for (int i = 0; i < LivePlayerGameObjects.Length; i++) {
 			//Debug.Log ("LivePlayerAverageLocation: " + LivePlayerAverageLocation);
@@ -408,6 +429,7 @@ public class GameManager : MonoBehaviour {
 		//then divide
 		LivePlayerAverageLocation = new Vector3 (LivePlayerAverageLocation.x / LivePlayerGameObjects.Length, LivePlayerAverageLocation.y / LivePlayerGameObjects.Length, LivePlayerAverageLocation.z / LivePlayerGameObjects.Length);
 		//Debug.Log ("LivePlayerAverageLocation after division: " + LivePlayerAverageLocation);
+		return LivePlayerAverageLocation;
 	}
 
 	void setSpawnPointDistancesArray ()
@@ -432,6 +454,42 @@ public class GameManager : MonoBehaviour {
 			// move original to new random location
 			DeadPlayerGameObjects [r] = tmp;
 			//move random to temp
+		}
+	}
+
+	public void startPickupRespawnTimerProxy(GameObject Pickup)
+	{
+		//Debug.Log ("trying to start proxy method");
+		StartCoroutine(startPickupRespawnTimer(Pickup));
+	}
+
+	public IEnumerator startPickupRespawnTimer(GameObject Pickup)
+	{
+		//Debug.Log ("started pickup respawn countdown");
+		yield return new WaitForSeconds(10.0f);
+		Pickup.gameObject.SetActive(true);
+		Debug.Log ("completed respawn countdown");
+
+	}
+
+	IEnumerator startRoundTimer()
+	{
+		Debug.Log ("Start Round timer");
+		roundResolved = false;
+		yield return new WaitForSeconds(roundTime);// wait for round to end
+		if (roundResolved == false)
+		{
+			UpdatePlayerClassArray();
+			relocateDeadPlayers();
+			StartCoroutine(classSelectCountDown());
+			Debug.Log ("finished round time and round restarted");
+		}
+		else if (roundResolved == true)
+		{
+			if (roundResolved == false)
+			{
+				Debug.Log ("finished round time finished but round already resolved");
+			}
 		}
 	}
 }
