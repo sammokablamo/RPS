@@ -28,6 +28,8 @@ public class CameraController : MonoBehaviour
 
 	public float averageLocationOffsetZ;
 
+
+
 	void Start ()
 	{
 

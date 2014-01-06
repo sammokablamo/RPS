@@ -46,17 +46,25 @@ public class GameManager : MonoBehaviour {
 	public float baseMoveSpeed; //players will follow this base move speed
 	public float maxMoveSpeed;//all players will hit this max move speed
 	public float moveSpeedDissipationRate;//all players will hit this max move speed
+
 	public float speedIncrementPerPill;
+	public float pillRespawnTime;
+
 
 	private GameObject[] liveRockPlayers;
 	private GameObject[] livePaperPlayers;
 	private GameObject[] liveScissorPlayers;
 
-
-
-
 	//round timer variables
 	public float roundTime;
+
+	//audio references
+	public AudioClip lowToneClip;
+	public AudioClip highToneClip;
+	private enum GlobalAudioFX {lowToneAudio, highToneAudio};
+
+
+
 
 	// Use this for initialization
 	void Start () {
@@ -81,6 +89,7 @@ public class GameManager : MonoBehaviour {
 
 		PlayerGameObjectsArray = GameObject.FindGameObjectsWithTag("Player"); 
 		     
+
 
 	}
 	
@@ -253,14 +262,23 @@ public class GameManager : MonoBehaviour {
 
 		ClassSelectState = true; //turn on class selection
 		SetAllPlayersAlive();
+
 		CenterAnnouncementText.text = "Rock!";
+		AudioManagement(GlobalAudioFX.lowToneAudio);
 		yield return new WaitForSeconds(1.0f);
+
 		CenterAnnouncementText.text = "Paper!";
+		AudioManagement(GlobalAudioFX.lowToneAudio);
 		yield return new WaitForSeconds(1.0f);
+
 		CenterAnnouncementText.text = "Scissors!";
+		AudioManagement(GlobalAudioFX.lowToneAudio);
 		yield return new WaitForSeconds(1.0f);
+
 		CenterAnnouncementText.text = "Go!";
+		AudioManagement(GlobalAudioFX.highToneAudio);
 		yield return new WaitForSeconds(1.0f);
+
 		CenterAnnouncementText.text = "";
 
 		ClassSelectState = false; //turn off class selection
@@ -488,7 +506,7 @@ public class GameManager : MonoBehaviour {
 	public IEnumerator startPickupRespawnTimer(GameObject Pickup)
 	{
 		//Debug.Log ("started pickup respawn countdown");
-		yield return new WaitForSeconds(10.0f);
+		yield return new WaitForSeconds(pillRespawnTime);
 		Pickup.gameObject.SetActive(true);
 		//Debug.Log ("completed respawn countdown");
 
@@ -586,5 +604,25 @@ public class GameManager : MonoBehaviour {
 
 			}
 		}
+	}
+
+	void AudioManagement (GlobalAudioFX AudioToPlay)
+	{
+		
+		// If the shout input has been pressed...
+		if(AudioToPlay == GlobalAudioFX.lowToneAudio)
+		{
+			// ... play the shouting clip where we are.
+			audio.PlayOneShot(lowToneClip, 1.0f);
+			//Debug.Log("play rock audio");
+		}
+		else if (AudioToPlay == GlobalAudioFX.highToneAudio)
+		{
+			// ... play the shouting clip where we are.
+			audio.PlayOneShot(highToneClip, 1.0f);
+			//Debug.Log("play rock audio");
+		}
+		
+
 	}
 }
