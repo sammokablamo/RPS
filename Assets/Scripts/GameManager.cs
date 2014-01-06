@@ -63,7 +63,8 @@ public class GameManager : MonoBehaviour {
 	public AudioClip highToneClip;
 	private enum GlobalAudioFX {lowToneAudio, highToneAudio};
 
-
+	//bumper
+	public float bumperForce = 40f;
 
 
 	// Use this for initialization

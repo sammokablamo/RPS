@@ -39,7 +39,11 @@ public class PlayerController : MonoBehaviour
 	public AudioClip PaperKillClip;      // Audio clip of the rock kill
 	public AudioClip ScissorsKillClip;      // Audio clip of the rock kill
 	public AudioClip PickupPillClip;
-	enum PlayerAudioFX {RockKillAudio, PaperKillAudio, ScissorKillAudio, PickupPillAudio};
+	public AudioClip BumperClip;
+	enum PlayerAudioFX {RockKillAudio, PaperKillAudio, ScissorKillAudio, PickupPillAudio, BumperAudio};
+
+	//bumper 
+	private float bumperForce;
 
 	void Awake() //Awake is called when the script instance is being loaded.
 	{
@@ -56,6 +60,7 @@ public class PlayerController : MonoBehaviour
 		moveSpeedDissipationRate = gameManager.moveSpeedDissipationRate;
 		speedIncrementPerPill = gameManager.speedIncrementPerPill;
 
+		bumperForce = gameManager.bumperForce;//bumper force reference
 	}
 
 	void OnDestroy()//This function is called when the MonoBehaviour will be destroyed. Cleanup Ouya components on destroyed
@@ -119,6 +124,8 @@ public class PlayerController : MonoBehaviour
 				gameManager.startPickupRespawnTimerProxy(other.gameObject);
 				//Debug.Log ("got past pickup respawn method call");
 			}
+
+
 			
 			if (other.gameObject.tag == "Player")
 			{
@@ -157,6 +164,19 @@ public class PlayerController : MonoBehaviour
 		}
 	}
 
+	void OnCollisionEnter(Collision collision)
+	{
+		if( collision.gameObject.tag == "Bumper")
+		{
+
+			ContactPoint contact = collision.contacts[0];
+			rigidbody.AddForce(-1 * contact.normal * bumperForce, ForceMode.Impulse);
+			AudioManagement(PlayerAudioFX.BumperAudio);
+
+			Debug.Log ("Hit a bumper.");
+		}
+	}
+
 	void AudioManagement (PlayerAudioFX AudioToPlay)
 	{
 
@@ -180,6 +200,12 @@ public class PlayerController : MonoBehaviour
 		else if (AudioToPlay == PlayerAudioFX.PickupPillAudio)
 		{
 			AudioSource.PlayClipAtPoint(PickupPillClip, transform.position);
+			//Debug.Log("play pill audio");
+		}
+
+		else if (AudioToPlay == PlayerAudioFX.BumperAudio)
+		{
+			AudioSource.PlayClipAtPoint(BumperClip, transform.position);
 			//Debug.Log("play pill audio");
 		}
 	}
