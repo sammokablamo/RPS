@@ -136,7 +136,7 @@ public class PlayerController : MonoBehaviour
 					gameManager.addToPlayerScore(inputHandler.player, 1, otherInputHandler.player); //add to player score and tell manager who died.
 					AudioManagement(PlayerAudioFX.RockKillAudio);
 					//Debug.Log(inputHandler.player);
-					Debug.Log ("Killed a scissor", gameObject);
+					//Debug.Log ("Killed a scissor", gameObject);
 				}
 
 				if (meshFilter.mesh.ToString() == "Paper Instance (UnityEngine.Mesh)" && otherMeshFilter.mesh.ToString() == "Rock Instance (UnityEngine.Mesh)" ) //Am I Paper and is the other thing Rock?
@@ -144,7 +144,7 @@ public class PlayerController : MonoBehaviour
 					other.gameObject.SetActive(false); //turn off other object
 					gameManager.addToPlayerScore(inputHandler.player, 1, otherInputHandler.player); //add to player score and tell manager who died.
 					AudioManagement(PlayerAudioFX.PaperKillAudio);
-					Debug.Log ("Killed a rock", gameObject);
+					//Debug.Log ("Killed a rock", gameObject);
 				}
 				if (meshFilter.mesh.ToString() == "Scissors Instance (UnityEngine.Mesh)" && otherMeshFilter.mesh.ToString() == "Paper Instance (UnityEngine.Mesh)" ) //Am I scissors and is the other thing a paper instance?
 				{

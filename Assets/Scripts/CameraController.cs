@@ -54,7 +54,7 @@ public class CameraController : MonoBehaviour
 
 		newCameraPositionX = Mathf.Clamp(newCameraPositionX, PositionMinLimit.x, PositionMaxLimit.x);
 		transform.position = new Vector3(newCameraPositionX, transform.position.y, transform.position.z);
-		SmoothLookAt();	
+		//SmoothLookAt();	
 
 
 	}

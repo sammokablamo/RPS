@@ -48,9 +48,15 @@ public class GameManager : MonoBehaviour {
 	public float moveSpeedDissipationRate;//all players will hit this max move speed
 	public float speedIncrementPerPill;
 
+	private GameObject[] liveRockPlayers;
+	private GameObject[] livePaperPlayers;
+	private GameObject[] liveScissorPlayers;
+
+
+
+
 	//round timer variables
 	public float roundTime;
-	private bool roundResolved;
 
 	// Use this for initialization
 	void Start () {
@@ -212,10 +218,21 @@ public class GameManager : MonoBehaviour {
 
 		if(PlayersAlive[deadPlayerIndex] == true) //only score if player is still alive at time of scoring. this gates multiple collision triggers from scoring same dude more than once.
 		{
-		setWhoDied(deadPlayerIndex);//change player to dead
-		PlayerScores[livePlayerIndex] = PlayerScores[livePlayerIndex] + additionalScore; //add additional score to existing score
-		SetScoreText();
+			setWhoDied(deadPlayerIndex);//change player to dead
+			
+			PlayerScores[livePlayerIndex] = PlayerScores[livePlayerIndex] + additionalScore; //add additional score to existing score
+			SetScoreText(); //update score HUD
 		}
+	}
+
+	//overloaded method where it doesn't require dead player game object, this version has setWhoDied removed
+	public void addToPlayerScore(OuyaPlayer playerNumber, int additionalScore) //add the player score when given player number and how much to add
+	{
+		//Debug.Log ("this is the index value of enum passed into add player score" + (int)playerNumber);
+		int livePlayerIndex = (int)playerNumber - 1; //figure out index number in Player Scores Array by subtracting one from the index number of Ouya Player enum
+
+		PlayerScores[livePlayerIndex] = PlayerScores[livePlayerIndex] + additionalScore; //add additional score to existing score
+		SetScoreText(); //update score HUD
 	}
 
 	public void setWhoDied(int deadPlayerIndex)
@@ -228,9 +245,11 @@ public class GameManager : MonoBehaviour {
 	IEnumerator classSelectCountDown()
 	{
 
-		roundResolved = true; //this tells the round timer not to restart when round timer is done.
+		StopCoroutine("startRoundTimer");//interupt round timer.
 		//Debug.Log ("Countdown script starting.");
-		yield return new WaitForSeconds(1.0f);
+		yield return new WaitForSeconds(.5f);
+
+
 
 		ClassSelectState = true; //turn on class selection
 		SetAllPlayersAlive();
@@ -249,6 +268,7 @@ public class GameManager : MonoBehaviour {
 		countDownConditionCheck(); //check if conditions are met for another countdown, this happens only when someone dies, and after a coundown finishes.
 
 		StartCoroutine(startRoundTimer());//start round timer
+
 	}
 
 	/*************************************************************************
@@ -278,9 +298,9 @@ public class GameManager : MonoBehaviour {
 
 		for(int i = 0; i < DeadPlayerGameObjects.Length; i++)//zero out velocities of dead player objects
 		{
-			Debug.Log ("initial velocity " + DeadPlayerGameObjects[i].GetComponent<Rigidbody>().velocity);
+			//Debug.Log ("initial velocity " + DeadPlayerGameObjects[i].GetComponent<Rigidbody>().velocity);
 			DeadPlayerGameObjects[i].GetComponent<Rigidbody>().velocity = new Vector3(0,0,0);
-			Debug.Log ("changed velocity " + DeadPlayerGameObjects[i].GetComponent<Rigidbody>().velocity);
+			//Debug.Log ("changed velocity " + DeadPlayerGameObjects[i].GetComponent<Rigidbody>().velocity);
 		}
 
 		findAverageLocationOfLivePlayers ();//get an average of locations of live players
@@ -304,9 +324,9 @@ public class GameManager : MonoBehaviour {
 		{
 			//find index of spawn point in unordered array that matches distance in ordered array, farthest distance first.
 			int spawnPointIndex = Array.IndexOf(SpawnPointDistances, SortedSpawnPointDistances[i]);
-			Debug.Log ("spawnPointIndex " + i + " is " + spawnPointIndex);
-			Debug.Log ( "SortedSpawnPointDistances[i]" + SortedSpawnPointDistances[i]);
-			Debug.Log ( "SpawnPointDistances[spawnPointIndex]" + SpawnPointDistances[spawnPointIndex]);
+			//Debug.Log ("spawnPointIndex " + i + " is " + spawnPointIndex);
+			//Debug.Log ( "SortedSpawnPointDistances[i]" + SortedSpawnPointDistances[i]);
+			//Debug.Log ( "SpawnPointDistances[spawnPointIndex]" + SpawnPointDistances[spawnPointIndex]);
 			//set dead player position
 			DeadPlayerGameObjects[i].transform.position = SpawnPointsArray[spawnPointIndex].transform.position;
   		}
@@ -380,6 +400,7 @@ public class GameManager : MonoBehaviour {
 			{
 				SetAllPlayersDead(); //disable all players
 				StartCoroutine(setWinnerText(i)); //announce winner
+				StopCoroutine("startRoundTimer");//stop round timer
 				return true;
 			}
 		}
@@ -408,6 +429,7 @@ public class GameManager : MonoBehaviour {
 				LivePlayerGameObjects [LivePlayerGameObjects.Length - 1] = PlayerGameObjectsArray [i];
 				// if player is alive add to live players array
 				//Debug.Log ("number of LivePlayerGameObjects: " + i);
+				//Debug.Log ("LivePlayerGameObjects # " + i + " = " + LivePlayerGameObjects [LivePlayerGameObjects.Length - 1]);
 			}
 			if (PlayerGameObjectsArray [i].activeSelf == false) {
 				Array.Resize (ref DeadPlayerGameObjects, DeadPlayerGameObjects.Length + 1);
@@ -468,27 +490,100 @@ public class GameManager : MonoBehaviour {
 		//Debug.Log ("started pickup respawn countdown");
 		yield return new WaitForSeconds(10.0f);
 		Pickup.gameObject.SetActive(true);
-		Debug.Log ("completed respawn countdown");
+		//Debug.Log ("completed respawn countdown");
 
 	}
 
 	IEnumerator startRoundTimer()
 	{
 		Debug.Log ("Start Round timer");
-		roundResolved = false;
 		yield return new WaitForSeconds(roundTime);// wait for round to end
-		if (roundResolved == false)
+
+		UpdatePlayerClassArray(); //update classes
+
+		determineSurvivorBonus(); //determine who survived the round despite having a pursuer.
+
+		relocateDeadPlayers(); //put dead players at respawn location 
+		if(!checkWinningScoreReached())//only start class selection if win condition is false, this is redundant but i'm sticking it in to be safe.
 		{
-			UpdatePlayerClassArray();
-			relocateDeadPlayers();
-			StartCoroutine(classSelectCountDown());
-			Debug.Log ("finished round time and round restarted");
+			StartCoroutine(classSelectCountDown()); //start class selection
 		}
-		else if (roundResolved == true)
+	
+		//Debug.Log ("finished round time and round restarted");
+	}
+
+	void determineSurvivorBonus()
+	{
+		setLiveAndDeadPlayerArrays (); //update live and dead player arrays
+		//Array.Sort (LivePlayerGameObjects);//sort array from lowest value to highest.
+		//Array.Reverse (SortedSpawnPointDistances);//reverse order so highest is first.
+
+		Debug.Log ("Determining survivor bonuses");
+		//empty out arrays
+		Array.Resize (ref liveRockPlayers, 0);
+		Array.Resize (ref livePaperPlayers, 0);
+		Array.Resize (ref liveScissorPlayers, 0);
+
+		for (int i = 0; i < LivePlayerGameObjects.Length; i++) //this goes through the live player objects array and seperates live player objects into arrays for each class
 		{
-			if (roundResolved == false)
+			if ( LivePlayerGameObjects[i].GetComponent<MeshFilter> ().mesh.ToString() == "Rock Instance (UnityEngine.Mesh)")//is your mesh component a rock instance?
 			{
-				Debug.Log ("finished round time finished but round already resolved");
+				Array.Resize (ref liveRockPlayers, liveRockPlayers.Length + 1);//update array size
+				// resize array of live players by one.
+				liveRockPlayers [liveRockPlayers.Length - 1] = LivePlayerGameObjects [i];//copy in player gameobject
+				Debug.Log ("Live rock players: " + liveRockPlayers [liveRockPlayers.Length - 1]);
+			}
+			if ( LivePlayerGameObjects[i].GetComponent<MeshFilter> ().mesh.ToString() == "Paper Instance (UnityEngine.Mesh)")
+			{
+				Array.Resize (ref livePaperPlayers, livePaperPlayers.Length + 1);
+				// resize array of live players by one.
+				livePaperPlayers [livePaperPlayers.Length - 1] = LivePlayerGameObjects [i];
+				Debug.Log ("Live paper players: " + livePaperPlayers [livePaperPlayers.Length - 1]);
+			}
+			if ( LivePlayerGameObjects[i].GetComponent<MeshFilter> ().mesh.ToString() == "Scissors Instance (UnityEngine.Mesh)")
+			{
+				Array.Resize (ref liveScissorPlayers, liveScissorPlayers.Length + 1);
+				// resize array of live players by one.
+				liveScissorPlayers [liveScissorPlayers.Length - 1] = LivePlayerGameObjects [i];
+				Debug.Log ("Live scissor players: " + liveScissorPlayers[liveScissorPlayers.Length - 1]);
+			}
+		}
+		//Debug.Log ("Number of Rock survivors: " + liveRockPlayers.Length);
+		//Debug.Log ("Number of Paper survivors: " + livePaperPlayers.Length);
+		//Debug.Log ("Number of Scissor survivors: " + liveScissorPlayers.Length);
+
+		//start making decisions of who are the survivors based on the size of each array
+		if (liveRockPlayers.Length == 0 && livePaperPlayers.Length != 0 && liveScissorPlayers.Length != 0)
+		{
+			for(int i = 0; i < livePaperPlayers.Length; i++)
+			{
+
+				addToPlayerScore(livePaperPlayers[i].GetComponent<InputHandler>().player, 2 * liveScissorPlayers.Length); //add to surviving player's score , multiply score by number of predators
+
+				//Debug.Log ("Trying to give paper bonus to: " + livePaperPlayers[i]);
+
+			}
+		}
+
+		else if (livePaperPlayers.Length == 0 && liveRockPlayers.Length != 0 && liveScissorPlayers.Length != 0)
+		{
+			for(int i = 0; i < liveScissorPlayers.Length; i++)
+			{
+				
+				addToPlayerScore(liveScissorPlayers[i].GetComponent<InputHandler>().player, 2 * liveRockPlayers.Length); //add to surviving player's score , multiply score by number of predators
+
+				Debug.Log ("Trying to give Scissors bonus." + liveScissorPlayers[i]);
+
+			}
+		}
+		else if (liveScissorPlayers.Length == 0 && livePaperPlayers.Length != 0 && liveRockPlayers.Length != 0)
+		{
+			for(int i = 0; i < liveRockPlayers.Length; i++)
+			{
+				
+				addToPlayerScore(liveRockPlayers[i].GetComponent<InputHandler>().player, 2 * livePaperPlayers.Length); //add to surviving player's score , multiply score by number of predators
+				Debug.Log ("Trying to give Rock bonus." + liveRockPlayers[i]);
+
 			}
 		}
 	}
