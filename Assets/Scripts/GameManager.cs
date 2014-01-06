@@ -430,8 +430,9 @@ public class GameManager : MonoBehaviour {
 	IEnumerator setWinnerText(int i)
 	{
 		CenterAnnouncementText.text = "Player " + (i + 1) + " wins!"; //set win text
-		yield return new WaitForSeconds(4.0f);
+		yield return new WaitForSeconds(6.0f);
 		CenterAnnouncementText.text = "";
+		Application.LoadLevel("minigame");//temp reloads level.
 	}
 
 	public void setLiveAndDeadPlayerArrays ()
