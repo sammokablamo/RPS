@@ -1379,13 +1379,13 @@ public static class OuyaInput
 				switch (button)
 				{
 					// OUYA buttons
-					case OuyaButton.O: 		return GetButton(0, buttonAction, mapPlayer);		// checked
-					case OuyaButton.U: 		return GetButton(3, buttonAction, mapPlayer);		// checked
-					case OuyaButton.Y: 		return GetButton(4, buttonAction, mapPlayer);		// checked
-					case OuyaButton.A: 		return GetButton(1, buttonAction, mapPlayer);		// checked
+					case OuyaButton.O: 		return GetButton(0, buttonAction, mapPlayer);		// checked by sam
+					case OuyaButton.U: 		return GetButton(2, buttonAction, mapPlayer);		// checked by Sam
+					case OuyaButton.Y: 		return GetButton(3, buttonAction, mapPlayer);		// checked by sam, doesn't work again
+					case OuyaButton.A: 		return GetButton(1, buttonAction, mapPlayer);		// checked by sam
 
 					// shoulder buttons	
-					case OuyaButton.LB:		return GetButton(6, buttonAction, mapPlayer);		// checked
+					case OuyaButton.LB:		return GetButton(4, buttonAction, mapPlayer);		// checked by sam
 					case OuyaButton.RB:		return GetButton(7, buttonAction, mapPlayer);		// checked
 
 					// center buttons
